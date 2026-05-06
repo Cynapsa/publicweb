@@ -22,7 +22,7 @@
         panel.id = "presentation-stepper";
         panel.innerHTML = `
             <div class="stepper-eyebrow">Presentation mode</div>
-            <div class="stepper-status" data-role="status">Start a simulation to queue its next step.</div>
+            <div class="stepper-status" data-role="status">Start a simulation.</div>
             <div class="stepper-actions">
                 <button type="button" data-role="play">Play</button>
                 <button type="button" data-role="pause">Pause</button>
@@ -33,46 +33,46 @@
         style.textContent = `
             #presentation-stepper {
                 position: fixed;
-                right: 1rem;
-                bottom: 1rem;
+                left: calc(33.333vw + 0.75rem);
+                bottom: 0.75rem;
                 z-index: 99999;
-                width: min(18rem, calc(100vw - 2rem));
-                padding: 0.85rem;
+                width: 11.25rem;
+                padding: 0.55rem;
                 border: 1px solid rgba(34, 211, 238, 0.45);
-                border-radius: 0.5rem;
+                border-radius: 0.4rem;
                 background: rgba(2, 6, 23, 0.92);
                 color: #e2e8f0;
-                box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 0 18px rgba(34, 211, 238, 0.16);
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28), 0 0 12px rgba(34, 211, 238, 0.14);
                 backdrop-filter: blur(10px);
                 font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             }
             #presentation-stepper .stepper-eyebrow {
-                margin-bottom: 0.35rem;
+                margin-bottom: 0.25rem;
                 color: #67e8f9;
-                font-size: 0.65rem;
+                font-size: 0.55rem;
                 font-weight: 800;
-                letter-spacing: 0.18em;
+                letter-spacing: 0.16em;
                 text-transform: uppercase;
             }
             #presentation-stepper .stepper-status {
-                min-height: 2.35rem;
-                margin-bottom: 0.7rem;
+                min-height: 1.8rem;
+                margin-bottom: 0.45rem;
                 color: #cbd5e1;
-                font-size: 0.78rem;
-                line-height: 1.45;
+                font-size: 0.68rem;
+                line-height: 1.32;
             }
             #presentation-stepper .stepper-actions {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 0.5rem;
+                gap: 0.35rem;
             }
             #presentation-stepper button {
-                min-height: 2.25rem;
+                min-height: 1.75rem;
                 border: 1px solid #475569;
-                border-radius: 0.375rem;
+                border-radius: 0.3rem;
                 background: #1e293b;
                 color: #f8fafc;
-                font-size: 0.82rem;
+                font-size: 0.7rem;
                 font-weight: 700;
                 cursor: pointer;
                 transition: border-color 160ms ease, background 160ms ease, color 160ms ease, opacity 160ms ease;
@@ -89,6 +89,13 @@
                 cursor: not-allowed;
                 opacity: 0.42;
             }
+            @media (max-width: 767px) {
+                #presentation-stepper {
+                    left: 0.75rem;
+                    bottom: 0.75rem;
+                    width: min(11.25rem, calc(100vw - 1.5rem));
+                }
+            }
         `;
 
         document.head.appendChild(style);
@@ -103,7 +110,7 @@
 
         ui.play.addEventListener("click", playNext);
         ui.pause.addEventListener("click", function () {
-            updateUi("Paused. Click Play when you are ready for the next queued step.");
+            updateUi("Paused. Click Play for next step.");
         });
 
         updateUi();
@@ -118,13 +125,13 @@
         if (message) {
             ui.status.textContent = message;
         } else if (!enabled) {
-            ui.status.textContent = "Start a simulation to queue its next step.";
+            ui.status.textContent = "Start a simulation.";
         } else if (runningStep) {
             ui.status.textContent = "Running one step...";
         } else if (queue.length) {
-            ui.status.textContent = `${queue.length} step${queue.length === 1 ? "" : "s"} queued. Click Play for the next step.`;
+            ui.status.textContent = `${queue.length} step${queue.length === 1 ? "" : "s"} queued.`;
         } else {
-            ui.status.textContent = "No queued steps. Start or continue a simulation.";
+            ui.status.textContent = "No queued steps.";
         }
 
         ui.play.disabled = runningStep || queue.length === 0;
@@ -140,7 +147,7 @@
     function startSession() {
         enabled = true;
         resetQueue();
-        updateUi("Simulation started. First step is running; the next timed step will pause here.");
+        updateUi("First step running. Next step will pause.");
     }
 
     function stopSession() {
