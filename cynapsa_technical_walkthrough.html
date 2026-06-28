@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cynapsa Technical Architecture Walkthrough</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { color-scheme: dark; }
+        body {
+            margin: 0;
+            background: #050811;
+            color: #e2e8f0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.075) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.075) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .flow { stroke-dasharray: 8 9; animation: flow 1s linear infinite; }
+        .flow-slow { stroke-dasharray: 14 10; animation: flow 2s linear infinite; }
+        .agent { transition: opacity 220ms ease, filter 220ms ease; }
+        .glow-cyan { filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.75)); }
+        .glow-green { filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.72)); }
+        .glow-red { filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.72)); }
+        .step.active {
+            border-color: #22d3ee;
+            background: rgba(14, 116, 144, 0.2);
+        }
+        @keyframes flow { to { stroke-dashoffset: -42; } }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.06); opacity: 0.88; }
+        }
+        .pulse { animation: pulse 1.7s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden">
+    <main class="grid h-full w-full grid-cols-[420px_1fr]">
+        <aside class="grid h-full gap-4 overflow-hidden border-r border-slate-800 bg-slate-950 p-6" style="grid-template-rows: auto minmax(0, 1fr) auto;">
+            <div>
+                <div class="text-[11px] font-bold uppercase tracking-[0.28em] text-cyan-300">Technical walkthrough</div>
+                <h1 class="mt-3 text-3xl font-bold leading-tight text-white">Cynapsa architecture for engineers and security teams</h1>
+                <p class="mt-3 text-sm leading-6 text-slate-400">A step-by-step explanation of how Cynapsa separates authorization, routing, segmentation, observability, and L7 AI security responsibilities.</p>
+            </div>
+
+            <div id="steps" class="min-h-0 space-y-2 overflow-y-auto pr-1" style="max-height: 34vh;"></div>
+
+            <section class="rounded-lg border border-slate-800 bg-slate-900/80 p-4">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div id="layer-label" class="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-300"></div>
+                        <h2 id="step-title" class="mt-2 text-xl font-bold text-white"></h2>
+                    </div>
+                    <div id="step-count" class="rounded border border-slate-700 px-2 py-1 text-xs font-bold text-slate-400"></div>
+                </div>
+                <p id="step-copy" class="mt-3 min-h-20 text-sm leading-6 text-slate-300"></p>
+                <pre id="step-code" class="mt-3 min-h-16 overflow-hidden rounded border border-slate-800 bg-slate-950 p-3 text-[11px] leading-5 text-slate-300"></pre>
+                <div class="mt-4 grid grid-cols-4 gap-2">
+                    <button id="prev" class="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-bold hover:border-cyan-400">Back</button>
+                    <button id="play" class="rounded border border-cyan-500 bg-cyan-700 px-3 py-2 text-sm font-bold text-white hover:bg-cyan-600">Play</button>
+                    <button id="pause" class="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-bold hover:border-cyan-400">Pause</button>
+                    <button id="next" class="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-bold hover:border-cyan-400">Next</button>
+                </div>
+            </section>
+        </aside>
+
+        <section class="relative overflow-hidden bg-[#050811]">
+            <div class="grid-bg absolute inset-0 opacity-35"></div>
+            <svg id="diagram" class="relative z-10 h-full w-full" viewBox="0 0 1160 720" role="img" aria-label="Cynapsa technical architecture diagram"></svg>
+            <div class="absolute bottom-5 left-5 right-5 z-20 grid grid-cols-4 gap-3">
+                <div class="rounded-lg border border-cyan-900/70 bg-slate-950/85 p-3">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300">Control plane</div>
+                    <div class="mt-1 text-xs text-slate-400">Identity, policy, topology, authorization</div>
+                </div>
+                <div class="rounded-lg border border-green-900/70 bg-slate-950/85 p-3">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">Data plane</div>
+                    <div class="mt-1 text-xs text-slate-400">P2P encrypted paths, no inbound ports</div>
+                </div>
+                <div class="rounded-lg border border-purple-900/70 bg-slate-950/85 p-3">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.18em] text-purple-300">L7 tools</div>
+                    <div class="mt-1 text-xs text-slate-400">Frameworks and AI security inspect payloads</div>
+                </div>
+                <div class="rounded-lg border border-orange-900/70 bg-slate-950/85 p-3">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.18em] text-orange-300">Telemetry</div>
+                    <div class="mt-1 text-xs text-slate-400">Network-native events to SIEM/OTel</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const steps = [
+            {
+                layer: "Baseline",
+                title: "Frameworks define the application conversation.",
+                copy: "LangGraph, CrewAI, Google A2A, and similar tools structure messages, roles, tool calls, and reasoning. They do not solve enterprise reachability, NAT traversal, firewall posture, or segmentation.",
+                code: "agent.framework = LangGraph | CrewAI | A2A\ntransport.assumption = HTTPS endpoint exists\nnetwork.reality = firewalls + NAT + private data",
+                mode: "framework"
+            },
+            {
+                layer: "Identity",
+                title: "Cynapsa binds networking to agent identity.",
+                copy: "Every participant is represented by a cryptographic identity. Policy evaluates who the agent is, which mesh context it belongs to, and whether the requested path should exist.",
+                code: "identity = cryptographic_agent_id\ncontext = finance | healthcare | legal | rd\nallow = identity && context && topology_rule",
+                mode: "identity"
+            },
+            {
+                layer: "Control plane",
+                title: "Authorization happens before traffic flows.",
+                copy: "The control plane validates identity, posture, membership, and topology out-of-band. Unauthorized peers never receive a usable route or token.",
+                code: "request_route(agent_a, agent_b)\n  verify(identity)\n  evaluate(policy)\n  return ephemeral_route_token",
+                mode: "control"
+            },
+            {
+                layer: "Data plane",
+                title: "Approved agents establish secure P2P paths.",
+                copy: "After authorization, traffic moves through a secure data plane path. Firewalls stay deny-all for inbound traffic, and agents do not rely on shared private subnets.",
+                code: "firewall.inbound = deny_all\ndata_path = encrypted_p2p(agent_a, agent_b)\nlegacy_gateway = not_required",
+                mode: "data"
+            },
+            {
+                layer: "Segmentation",
+                title: "Mesh contexts replace location-based trust.",
+                copy: "Two agents in the same VPC may be blocked, while two agents in different locations may connect. Trust follows identity and mesh context, not proximity.",
+                code: "same_subnet != trusted\nsame_mesh_context && policy_allow == routable\ncross_mesh_request == dropped",
+                mode: "segmentation"
+            },
+            {
+                layer: "Defense in depth",
+                title: "Cynapsa complements Layer 7 AI security.",
+                copy: "Prompt scanners and AI firewalls inspect the payload. Cynapsa secures the pipe underneath, removing the need to expose raw network access just so L7 tools can operate.",
+                code: "L3_L4: Cynapsa secure path\nL7: prompt inspection + policy + model firewall\nresult: closed ports + inspected payloads",
+                mode: "l7"
+            },
+            {
+                layer: "Observability",
+                title: "Telemetry is extracted from the network path.",
+                copy: "Because Cynapsa controls routing decisions and traffic paths, it can emit useful events without requiring every team or vendor to add logging code to every agent.",
+                code: "event = route_request | allow | deny | anomaly\nexport = OpenTelemetry | SIEM | audit log\ncoverage = owned + vendor + unmanaged agents",
+                mode: "observability"
+            },
+            {
+                layer: "Incident response",
+                title: "A bad agent is isolated by default.",
+                copy: "If an identity becomes risky, route tokens can be revoked and unauthorized attempts are dropped. The compromise is contained to allowed relationships instead of the network around it.",
+                code: "trust_score(agent) = 0\nrevoke(route_tokens)\ndrop(non_mesh_packets)\nblast_radius = policy_scope",
+                mode: "containment"
+            }
+        ];
+
+        const diagram = document.getElementById("diagram");
+        const stepsEl = document.getElementById("steps");
+        const layerLabel = document.getElementById("layer-label");
+        const stepTitle = document.getElementById("step-title");
+        const stepCopy = document.getElementById("step-copy");
+        const stepCode = document.getElementById("step-code");
+        const stepCount = document.getElementById("step-count");
+        let index = 0;
+        let timer = null;
+
+        function box(x, y, w, h, label, stroke, opacity = 1) {
+            return `<g opacity="${opacity}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="16" fill="rgba(15,23,42,0.78)" stroke="${stroke}" stroke-width="2"/><text x="${x + 16}" y="${y + 28}" fill="${stroke}" font-size="12" font-family="monospace" font-weight="800">${label}</text></g>`;
+        }
+
+        function agent(x, y, label, id, color, cls = "") {
+            return `<g class="agent ${cls}"><circle cx="${x}" cy="${y}" r="32" fill="#0f172a" stroke="${color}" stroke-width="3"/><rect x="${x - 15}" y="${y - 15}" width="30" height="30" rx="8" fill="${color}" opacity="0.18" stroke="${color}"/><text x="${x}" y="${y + 5}" text-anchor="middle" fill="${color}" font-size="14" font-weight="900">AI</text><text x="${x}" y="${y + 55}" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="800">${label}</text><text x="${x}" y="${y + 72}" text-anchor="middle" fill="#94a3b8" font-size="10">${id}</text></g>`;
+        }
+
+        function line(x1, y1, x2, y2, color, width = 3, cls = "flow", opacity = 1) {
+            return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" opacity="${opacity}" class="${cls}"/>`;
+        }
+
+        function label(x, y, text, color = "#22d3ee", w = 220) {
+            return `<g><rect x="${x}" y="${y}" width="${w}" height="38" rx="10" fill="rgba(2,6,23,0.9)" stroke="${color}" stroke-width="2"/><text x="${x + 14}" y="${y + 24}" fill="${color}" font-size="13" font-weight="900">${text}</text></g>`;
+        }
+
+        function ccp(active = true) {
+            return `<g opacity="${active ? 1 : 0.25}" class="${active ? "pulse" : ""}"><circle cx="580" cy="250" r="70" fill="rgba(76,29,149,0.78)" stroke="#a855f7" stroke-width="3"/><text x="580" y="242" text-anchor="middle" fill="#f5d0fe" font-size="16" font-weight="900">Cynapsa</text><text x="580" y="264" text-anchor="middle" fill="#d8b4fe" font-size="12">control plane</text></g>`;
+        }
+
+        function render(mode) {
+            const parts = [
+                box(70, 90, 270, 165, "AWS VPC", "#38bdf8"),
+                box(820, 90, 270, 165, "GCP VPC", "#38bdf8"),
+                box(70, 400, 270, 165, "ON-PREM", "#f59e0b"),
+                box(820, 400, 270, 165, "LOCAL / EDGE", "#a78bfa"),
+                agent(155, 180, "Planner", "id:0xA1", "#22d3ee", mode !== "framework" ? "glow-cyan" : ""),
+                agent(255, 180, "Tool", "id:0xB4", "#22d3ee", mode !== "framework" ? "glow-cyan" : ""),
+                agent(905, 180, "Worker", "id:0xC7", "#22d3ee", mode !== "framework" ? "glow-cyan" : ""),
+                agent(160, 495, "Data", "id:0xD2", "#f59e0b", mode === "data" || mode === "segmentation" ? "glow-green" : ""),
+                agent(930, 495, "Mobile", "id:0xE9", "#a78bfa", mode === "containment" ? "glow-red" : ""),
+            ];
+
+            if (mode === "framework") {
+                parts.push(label(420, 145, "L7 framework payloads", "#a78bfa", 260));
+                parts.push(line(155, 180, 255, 180, "#a78bfa", 3));
+                parts.push(line(255, 180, 905, 180, "#64748b", 2, "flow-slow", 0.35));
+                parts.push(label(420, 335, "Network assumed, not solved", "#f59e0b", 300));
+            }
+
+            if (mode === "identity" || mode === "control" || mode === "data" || mode === "segmentation" || mode === "l7" || mode === "observability" || mode === "containment") {
+                parts.push(ccp(true));
+                parts.push(line(580, 250, 155, 180, "#a855f7", 2));
+                parts.push(line(580, 250, 905, 180, "#a855f7", 2));
+                parts.push(line(580, 250, 160, 495, "#a855f7", 2));
+                parts.push(line(580, 250, 930, 495, "#a855f7", 2));
+            }
+
+            if (mode === "identity") {
+                parts.push(label(380, 385, "Identity, not IP, becomes the trust primitive", "#22d3ee", 390));
+                parts.push(label(385, 435, "agent id + context + policy", "#4ade80", 300));
+            }
+
+            if (mode === "control") {
+                parts.push(label(395, 365, "Out-of-band authorization", "#a855f7", 300));
+                parts.push(label(410, 415, "route token issued only after policy allow", "#22d3ee", 360));
+            }
+
+            if (mode === "data") {
+                parts.push(line(155, 180, 905, 180, "#4ade80", 4));
+                parts.push(line(905, 180, 160, 495, "#4ade80", 4));
+                parts.push(label(375, 450, "Encrypted P2P data plane", "#4ade80", 280));
+                parts.push(label(435, 500, "inbound firewall remains closed", "#f59e0b", 320));
+            }
+
+            if (mode === "segmentation") {
+                parts.push(line(155, 180, 160, 495, "#4ade80", 4));
+                parts.push(line(255, 180, 905, 180, "#38bdf8", 4));
+                parts.push(line(930, 495, 160, 495, "#ef4444", 4, "flow-slow", 0.75));
+                parts.push(label(412, 455, "cross-mesh request dropped", "#ef4444", 280));
+            }
+
+            if (mode === "l7") {
+                parts.push(line(155, 180, 905, 180, "#4ade80", 4));
+                parts.push(`<g><rect x="430" y="380" width="300" height="95" rx="16" fill="rgba(88,28,135,0.68)" stroke="#c084fc" stroke-width="2"/><text x="580" y="416" text-anchor="middle" fill="#f5d0fe" font-size="15" font-weight="900">Layer 7 AI security</text><text x="580" y="442" text-anchor="middle" fill="#ddd6fe" font-size="12">prompt scanning, payload policy, model firewall</text></g>`);
+                parts.push(label(400, 500, "Cynapsa secures the pipe underneath", "#22d3ee", 360));
+            }
+
+            if (mode === "observability") {
+                parts.push(line(155, 180, 905, 180, "#4ade80", 4));
+                parts.push(line(905, 180, 160, 495, "#4ade80", 4));
+                parts.push(`<g><rect x="455" y="415" width="250" height="86" rx="16" fill="rgba(124,45,18,0.58)" stroke="#fb923c" stroke-width="2"/><text x="580" y="448" text-anchor="middle" fill="#fed7aa" font-size="15" font-weight="900">Telemetry export</text><text x="580" y="472" text-anchor="middle" fill="#fdba74" font-size="12">OpenTelemetry / SIEM / audit</text></g>`);
+                parts.push(line(580, 250, 580, 415, "#fb923c", 3));
+            }
+
+            if (mode === "containment") {
+                parts.push(agent(930, 495, "Compromised", "id:0xE9", "#ef4444", "glow-red"));
+                parts.push(line(930, 495, 160, 495, "#ef4444", 5, "flow-slow"));
+                parts.push(`<g><rect x="502" y="465" width="145" height="48" rx="12" fill="rgba(127,29,29,0.94)" stroke="#ef4444" stroke-width="3"/><text x="574" y="496" text-anchor="middle" fill="#fecaca" font-size="16" font-weight="900">DROP</text></g>`);
+                parts.push(label(420, 535, "tokens revoked, no route propagated", "#4ade80", 350));
+            }
+
+            diagram.innerHTML = parts.join("");
+        }
+
+        function renderStep(nextIndex) {
+            index = (nextIndex + steps.length) % steps.length;
+            const step = steps[index];
+            render(step.mode);
+            layerLabel.textContent = step.layer;
+            stepTitle.textContent = step.title;
+            stepCopy.textContent = step.copy;
+            stepCode.textContent = step.code;
+            stepCount.textContent = `${index + 1}/${steps.length}`;
+            stepsEl.querySelectorAll("button").forEach((button, buttonIndex) => {
+                button.classList.toggle("active", buttonIndex === index);
+            });
+        }
+
+        function buildSteps() {
+            stepsEl.innerHTML = steps.map((step, stepIndex) => `
+                <button class="step w-full rounded-lg border border-slate-800 bg-slate-900/50 p-3 text-left" data-index="${stepIndex}" type="button">
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300">${step.layer}</span>
+                        <span class="text-xs font-bold text-slate-500">${String(stepIndex + 1).padStart(2, "0")}</span>
+                    </div>
+                    <div class="mt-1 text-sm font-bold text-white">${step.title}</div>
+                </button>
+            `).join("");
+            stepsEl.querySelectorAll("button").forEach(button => {
+                button.addEventListener("click", () => {
+                    pause();
+                    renderStep(Number(button.dataset.index));
+                });
+            });
+        }
+
+        function next() { renderStep(index + 1); }
+        function previous() { renderStep(index - 1); }
+        function play() {
+            pause();
+            timer = setInterval(next, 5600);
+        }
+        function pause() {
+            if (timer) clearInterval(timer);
+            timer = null;
+        }
+
+        document.getElementById("next").addEventListener("click", () => { pause(); next(); });
+        document.getElementById("prev").addEventListener("click", () => { pause(); previous(); });
+        document.getElementById("play").addEventListener("click", play);
+        document.getElementById("pause").addEventListener("click", pause);
+        document.addEventListener("keydown", event => {
+            if (event.key === "ArrowRight") { pause(); next(); }
+            if (event.key === "ArrowLeft") { pause(); previous(); }
+            if (event.key === " ") { event.preventDefault(); timer ? pause() : play(); }
+        });
+
+        buildSteps();
+        renderStep(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cynapsa Sales Movie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            overflow: hidden;
+            background: #020617;
+            color: #e2e8f0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .movie {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 24% 18%, rgba(34, 211, 238, 0.18), transparent 26rem),
+                radial-gradient(circle at 78% 78%, rgba(168, 85, 247, 0.16), transparent 30rem),
+                #050811;
+        }
+
+        .grid {
+            position: absolute;
+            inset: 0;
+            opacity: 0.22;
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(circle at center, black, transparent 82%);
+        }
+
+        .title-lockup {
+            position: absolute;
+            z-index: 20;
+            top: 4.2vh;
+            left: 4.6vw;
+            max-width: 34rem;
+        }
+
+        .eyebrow {
+            color: #67e8f9;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+        }
+
+        .headline {
+            margin-top: 0.8rem;
+            color: #fff;
+            font-size: clamp(2.2rem, 4.7vw, 5.4rem);
+            font-weight: 900;
+            line-height: 0.96;
+            letter-spacing: 0;
+        }
+
+        .headline span {
+            color: #22d3ee;
+        }
+
+        .caption {
+            position: absolute;
+            z-index: 30;
+            left: 4.6vw;
+            bottom: 5.4vh;
+            width: min(40rem, 48vw);
+            min-height: 9.5rem;
+            padding: 1.35rem 1.45rem;
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            border-radius: 0.65rem;
+            background: rgba(2, 6, 23, 0.84);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.36), 0 0 24px rgba(34, 211, 238, 0.12);
+            backdrop-filter: blur(14px);
+        }
+
+        .caption-kicker {
+            color: #67e8f9;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.23em;
+            text-transform: uppercase;
+        }
+
+        .caption-title {
+            margin-top: 0.55rem;
+            color: #fff;
+            font-size: clamp(1.45rem, 2.2vw, 2.25rem);
+            font-weight: 900;
+            line-height: 1.05;
+        }
+
+        .caption-copy {
+            margin-top: 0.75rem;
+            max-width: 36rem;
+            color: #cbd5e1;
+            font-size: clamp(0.92rem, 1.1vw, 1.08rem);
+            line-height: 1.6;
+        }
+
+        .stage {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+        }
+
+        .app-shell {
+            position: absolute;
+            left: 50%;
+            top: 47%;
+            width: 42rem;
+            height: 20rem;
+            transform: translate(-50%, -50%) scale(1);
+            border: 2px solid rgba(34, 211, 238, 0.75);
+            border-radius: 1.2rem;
+            background: rgba(15, 23, 42, 0.72);
+            box-shadow: inset 0 0 38px rgba(34, 211, 238, 0.08), 0 0 32px rgba(34, 211, 238, 0.15);
+            opacity: 1;
+            transition: opacity 1s ease, transform 1s ease, border-color 1s ease;
+        }
+
+        .app-shell::before {
+            content: "MULTI-AGENT APPLICATION";
+            position: absolute;
+            top: 1rem;
+            left: 1.2rem;
+            color: #67e8f9;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+        }
+
+        .env {
+            position: absolute;
+            width: 21rem;
+            height: 12.6rem;
+            border: 2px solid rgba(71, 85, 105, 0.68);
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.42);
+            opacity: 0;
+            transform: scale(0.94);
+            transition: opacity 900ms ease, transform 900ms ease, border-color 900ms ease, box-shadow 900ms ease;
+        }
+
+        .env::before {
+            content: attr(data-label);
+            position: absolute;
+            top: 0.9rem;
+            left: 1rem;
+            color: #94a3b8;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+        }
+
+        .env-cloud { left: 39%; top: 14%; border-color: rgba(56, 189, 248, 0.52); }
+        .env-google { right: 5.3%; top: 17%; border-color: rgba(96, 165, 250, 0.52); }
+        .env-onprem { right: 7%; bottom: 13%; border-color: rgba(245, 158, 11, 0.55); }
+        .env-aws { left: 42%; bottom: 10%; border-color: rgba(74, 222, 128, 0.52); }
+
+        .agent {
+            position: absolute;
+            z-index: 18;
+            width: 7.3rem;
+            height: 7.3rem;
+            display: grid;
+            place-items: center;
+            transform: translate(-50%, -50%);
+            transition: left 1.55s cubic-bezier(0.22, 1, 0.36, 1), top 1.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms ease, filter 700ms ease;
+        }
+
+        .agent-core {
+            position: relative;
+            width: 4.45rem;
+            height: 4.45rem;
+            display: grid;
+            place-items: center;
+            border: 3px solid #22d3ee;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.92);
+            color: #67e8f9;
+            box-shadow: 0 0 22px rgba(34, 211, 238, 0.35);
+        }
+
+        .agent-core::after {
+            content: "";
+            position: absolute;
+            inset: 1rem;
+            border-radius: 50%;
+            background: #22d3ee;
+            box-shadow: 0 0 22px #22d3ee;
+            opacity: 0.82;
+        }
+
+        .agent-icon {
+            position: relative;
+            z-index: 2;
+            color: #020617;
+            font-size: 0.76rem;
+            font-weight: 1000;
+        }
+
+        .agent-label {
+            position: absolute;
+            top: 5.95rem;
+            width: 12rem;
+            text-align: center;
+            color: #fff;
+            font-size: 0.86rem;
+            font-weight: 900;
+        }
+
+        .agent-sub {
+            display: block;
+            margin-top: 0.25rem;
+            color: #94a3b8;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.62rem;
+            font-weight: 700;
+        }
+
+        .agent.orchestrator .agent-core {
+            border-color: #a855f7;
+            color: #e9d5ff;
+            box-shadow: 0 0 28px rgba(168, 85, 247, 0.45);
+        }
+
+        .agent.orchestrator .agent-core::after {
+            background: #a855f7;
+            box-shadow: 0 0 24px #a855f7;
+        }
+
+        .agent.data .agent-core { border-color: #f59e0b; box-shadow: 0 0 26px rgba(245, 158, 11, 0.36); }
+        .agent.data .agent-core::after { background: #f59e0b; box-shadow: 0 0 22px #f59e0b; }
+        .agent.action .agent-core { border-color: #4ade80; box-shadow: 0 0 26px rgba(74, 222, 128, 0.36); }
+        .agent.action .agent-core::after { background: #4ade80; box-shadow: 0 0 22px #4ade80; }
+
+        .lines {
+            position: absolute;
+            inset: 0;
+            z-index: 12;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .mesh-line,
+        .legacy-line,
+        .question-line {
+            opacity: 0;
+            transition: opacity 800ms ease;
+            stroke-linecap: round;
+        }
+
+        .mesh-line {
+            stroke: #22d3ee;
+            stroke-width: 0.65;
+            stroke-dasharray: 9 10;
+            filter: drop-shadow(0 0 7px rgba(34, 211, 238, 0.9));
+            animation: flow 1s linear infinite;
+        }
+
+        .mesh-line.green { stroke: #4ade80; filter: drop-shadow(0 0 7px rgba(74, 222, 128, 0.8)); }
+        .mesh-line.gold { stroke: #f59e0b; filter: drop-shadow(0 0 7px rgba(245, 158, 11, 0.8)); }
+
+        .legacy-line {
+            stroke: #f59e0b;
+            stroke-width: 0.85;
+            stroke-dasharray: 16 14;
+            animation: flow-slow 2.4s linear infinite;
+        }
+
+        .question-line {
+            stroke: #ef4444;
+            stroke-width: 0.7;
+            stroke-dasharray: 7 12;
+            animation: flow-slow 1.8s linear infinite;
+            filter: drop-shadow(0 0 7px rgba(239, 68, 68, 0.65));
+        }
+
+        @keyframes flow { to { stroke-dashoffset: -38; } }
+        @keyframes flow-slow { to { stroke-dashoffset: -60; } }
+
+        .legacy-stack,
+        .cynapsa-core,
+        .verdict,
+        .benefits {
+            position: absolute;
+            z-index: 22;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.94);
+            transition: opacity 900ms ease, transform 900ms ease;
+        }
+
+        .legacy-stack {
+            left: 55%;
+            top: 51%;
+            width: 18rem;
+            padding: 1rem;
+            border: 2px solid #f97316;
+            border-radius: 1rem;
+            background: rgba(124, 45, 18, 0.86);
+            box-shadow: 0 0 28px rgba(249, 115, 22, 0.24);
+        }
+
+        .legacy-box {
+            margin: 0.55rem 0;
+            padding: 0.62rem;
+            border: 1px solid rgba(253, 186, 116, 0.62);
+            border-radius: 0.45rem;
+            background: rgba(15, 23, 42, 0.45);
+            color: #fed7aa;
+            text-align: center;
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .verdict {
+            left: 55%;
+            top: 25%;
+            width: 34rem;
+            padding: 1.25rem 1.45rem;
+            border: 2px solid #ef4444;
+            border-radius: 0.9rem;
+            background: rgba(127, 29, 29, 0.88);
+            color: #fee2e2;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.24);
+        }
+
+        .verdict-title {
+            font-size: clamp(1.4rem, 2.4vw, 2.4rem);
+            font-weight: 1000;
+            letter-spacing: 0;
+        }
+
+        .cynapsa-core {
+            left: 55%;
+            top: 49%;
+            width: 13rem;
+            height: 13rem;
+            display: grid;
+            place-items: center;
+            border: 3px solid #22d3ee;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(8, 145, 178, 0.84), rgba(30, 41, 59, 0.92));
+            box-shadow: 0 0 42px rgba(34, 211, 238, 0.38);
+        }
+
+        .cynapsa-core::before {
+            content: "";
+            position: absolute;
+            inset: -1rem;
+            border: 1px dashed rgba(34, 211, 238, 0.5);
+            border-radius: 50%;
+            animation: spin 16s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .cynapsa-word {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 1000;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .cynapsa-sub {
+            margin-top: 0.25rem;
+            color: #cffafe;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .benefits {
+            left: 66%;
+            top: 9%;
+            display: flex;
+            gap: 0.7rem;
+        }
+
+        .benefit {
+            padding: 0.62rem 0.78rem;
+            border: 1px solid rgba(34, 211, 238, 0.5);
+            border-radius: 999px;
+            background: rgba(2, 6, 23, 0.82);
+            color: #a5f3fc;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .progress {
+            position: absolute;
+            z-index: 40;
+            left: 4.6vw;
+            right: 4.6vw;
+            bottom: 2.2vh;
+            height: 3px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: rgba(51, 65, 85, 0.7);
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #22d3ee, #4ade80);
+            transition: width 500ms linear;
+        }
+
+        .replay {
+            position: absolute;
+            z-index: 40;
+            top: 4.5vh;
+            right: 4.6vw;
+            padding: 0.7rem 0.95rem;
+            border: 1px solid rgba(34, 211, 238, 0.5);
+            border-radius: 999px;
+            background: rgba(2, 6, 23, 0.62);
+            color: #cffafe;
+            font-size: 0.78rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .scene-production .app-shell,
+        .scene-question .app-shell,
+        .scene-legacy .app-shell,
+        .scene-cynapsa .app-shell,
+        .scene-final .app-shell {
+            opacity: 0.16;
+            transform: translate(-50%, -50%) scale(0.78);
+            border-color: rgba(71, 85, 105, 0.45);
+        }
+
+        .scene-production .env,
+        .scene-question .env,
+        .scene-legacy .env,
+        .scene-cynapsa .env,
+        .scene-final .env {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .scene-production .env-cloud,
+        .scene-cynapsa .env-cloud,
+        .scene-final .env-cloud { box-shadow: 0 0 25px rgba(56, 189, 248, 0.14); }
+        .scene-production .env-google,
+        .scene-cynapsa .env-google,
+        .scene-final .env-google { box-shadow: 0 0 25px rgba(96, 165, 250, 0.14); }
+        .scene-production .env-onprem,
+        .scene-cynapsa .env-onprem,
+        .scene-final .env-onprem { box-shadow: 0 0 25px rgba(245, 158, 11, 0.14); }
+        .scene-production .env-aws,
+        .scene-cynapsa .env-aws,
+        .scene-final .env-aws { box-shadow: 0 0 25px rgba(74, 222, 128, 0.14); }
+
+        .scene-question .question-line,
+        .scene-legacy .question-line {
+            opacity: 1;
+        }
+
+        .scene-legacy .legacy-line {
+            opacity: 0.95;
+        }
+
+        .scene-legacy .legacy-stack,
+        .scene-legacy .verdict {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .scene-cynapsa .cynapsa-core,
+        .scene-final .cynapsa-core,
+        .scene-cynapsa .benefits,
+        .scene-final .benefits {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .scene-cynapsa .mesh-line,
+        .scene-final .mesh-line {
+            opacity: 1;
+        }
+
+        .scene-final .env {
+            border-color: rgba(34, 211, 238, 0.64);
+        }
+
+        .scene-final .app-shell {
+            opacity: 0;
+        }
+
+        .scene-final .headline span {
+            color: #4ade80;
+        }
+
+        @media (max-width: 900px) {
+            .caption {
+                width: calc(100vw - 2rem);
+                left: 1rem;
+                bottom: 4rem;
+            }
+            .title-lockup {
+                left: 1rem;
+                top: 1.2rem;
+            }
+            .headline {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="movie" class="movie scene-lab">
+        <div class="grid"></div>
+
+        <button class="replay" type="button" onclick="restartMovie()">Replay</button>
+
+        <section class="title-lockup">
+            <div class="eyebrow">Cynapsa movie explainer</div>
+            <h1 class="headline">From agent demo to <span>production mesh</span></h1>
+        </section>
+
+        <section class="stage" aria-label="Animated Cynapsa sales explainer">
+            <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line class="question-line" x1="51" y1="27" x2="83" y2="27"></line>
+                <line class="question-line" x1="51" y1="27" x2="82" y2="72"></line>
+                <line class="question-line" x1="51" y1="27" x2="51" y2="73"></line>
+                <line class="question-line" x1="51" y1="27" x2="82" y2="28"></line>
+
+                <line class="legacy-line" x1="51" y1="27" x2="55" y2="51"></line>
+                <line class="legacy-line" x1="55" y1="51" x2="83" y2="27"></line>
+                <line class="legacy-line" x1="55" y1="51" x2="82" y2="72"></line>
+                <line class="legacy-line" x1="55" y1="51" x2="51" y2="73"></line>
+
+                <line class="mesh-line" x1="51" y1="27" x2="83" y2="27"></line>
+                <line class="mesh-line gold" x1="51" y1="27" x2="82" y2="72"></line>
+                <line class="mesh-line green" x1="51" y1="27" x2="51" y2="73"></line>
+                <line class="mesh-line" x1="51" y1="27" x2="82" y2="28"></line>
+            </svg>
+
+            <div class="app-shell"></div>
+
+            <div class="env env-cloud" data-label="CLOUD ORCHESTRATION"></div>
+            <div class="env env-google" data-label="GOOGLE CLOUD"></div>
+            <div class="env env-onprem" data-label="ON-PREM DATA"></div>
+            <div class="env env-aws" data-label="AWS / ACTIONS"></div>
+
+            <div id="orchestrator" class="agent orchestrator">
+                <div class="agent-core"><span class="agent-icon">ORCH</span></div>
+                <div class="agent-label">Orchestrator<span class="agent-sub">Cloud brain</span></div>
+            </div>
+
+            <div id="research" class="agent research">
+                <div class="agent-core"><span class="agent-icon">R</span></div>
+                <div class="agent-label">Research Agent<span class="agent-sub">Google Cloud</span></div>
+            </div>
+
+            <div id="data" class="agent data">
+                <div class="agent-core"><span class="agent-icon">D</span></div>
+                <div class="agent-label">Data Agent<span class="agent-sub">On-prem data</span></div>
+            </div>
+
+            <div id="action" class="agent action">
+                <div class="agent-core"><span class="agent-icon">A</span></div>
+                <div class="agent-label">Action Agent<span class="agent-sub">AWS tools</span></div>
+            </div>
+
+            <div class="legacy-stack">
+                <div class="legacy-box">VPN tunnel</div>
+                <div class="legacy-box">API gateway</div>
+                <div class="legacy-box">Firewall exceptions</div>
+                <div class="legacy-box">Load balancers</div>
+            </div>
+
+            <div class="verdict">
+                <div class="verdict-title">Legacy architecture: irrelevant</div>
+                <div class="mt-2 text-sm font-semibold text-red-100">It connects networks and ports. Agentic AI needs identity, policy, and secure agent-to-agent reachability.</div>
+            </div>
+
+            <div class="cynapsa-core">
+                <div>
+                    <div class="cynapsa-word">Cynapsa</div>
+                    <div class="cynapsa-sub">Agent mesh</div>
+                </div>
+            </div>
+
+            <div class="benefits">
+                <div class="benefit">Zero trust</div>
+                <div class="benefit">Identity-based encryption</div>
+                <div class="benefit">No code change</div>
+            </div>
+        </section>
+
+        <section class="caption">
+            <div id="caption-kicker" class="caption-kicker"></div>
+            <div id="caption-title" class="caption-title"></div>
+            <div id="caption-copy" class="caption-copy"></div>
+        </section>
+
+        <div class="progress"><div id="progress-bar" class="progress-bar"></div></div>
+    </main>
+
+    <script>
+        const movie = document.getElementById("movie");
+        const progressBar = document.getElementById("progress-bar");
+        const captionKicker = document.getElementById("caption-kicker");
+        const captionTitle = document.getElementById("caption-title");
+        const captionCopy = document.getElementById("caption-copy");
+
+        const agents = {
+            orchestrator: document.getElementById("orchestrator"),
+            research: document.getElementById("research"),
+            data: document.getElementById("data"),
+            action: document.getElementById("action")
+        };
+
+        const positions = {
+            lab: {
+                orchestrator: [43, 47],
+                research: [50, 47],
+                data: [57, 47],
+                action: [64, 47]
+            },
+            production: {
+                orchestrator: [51, 27],
+                research: [83, 27],
+                data: [82, 72],
+                action: [51, 73]
+            }
+        };
+
+        const scenes = [
+            {
+                className: "scene-lab",
+                duration: 3600,
+                positions: "lab",
+                kicker: "Scene 1 / The demo",
+                title: "A multi-agent app starts in one clean environment.",
+                copy: "The orchestrator and agents work beautifully when everything lives inside a single application boundary."
+            },
+            {
+                className: "scene-production",
+                duration: 4300,
+                positions: "production",
+                kicker: "Scene 2 / Production reality",
+                title: "Then production pulls the agents apart.",
+                copy: "The orchestrator stays in the cloud. The research agent moves to Google Cloud. The data agent moves on-prem, where the data actually resides. The action agent lands near operational tools."
+            },
+            {
+                className: "scene-question",
+                duration: 3300,
+                positions: "production",
+                kicker: "Scene 3 / The problem",
+                title: "Now the application has a network problem.",
+                copy: "How do these remote agents communicate safely across clouds, private networks, and data boundaries without opening up the enterprise?"
+            },
+            {
+                className: "scene-legacy",
+                duration: 4300,
+                positions: "production",
+                kicker: "Scene 4 / The old answer",
+                title: "Legacy architecture is irrelevant.",
+                copy: "VPNs, gateways, open ports, and load balancers were built around networks and servers. Agentic AI needs trusted agent-to-agent connectivity."
+            },
+            {
+                className: "scene-cynapsa",
+                duration: 5000,
+                positions: "production",
+                kicker: "Scene 5 / The Cynapsa magic",
+                title: "Cynapsa creates the secure agent mesh.",
+                copy: "Zero-trust connections are created between authorized agents using identity-based encryption. The app keeps working as-is."
+            },
+            {
+                className: "scene-final",
+                duration: 5200,
+                positions: "production",
+                kicker: "Scene 6 / The outcome",
+                title: "Production-grade agentic AI. No code change.",
+                copy: "Cynapsa handles secure connectivity, identity, encryption, and reachability across every location so teams can deploy agents wherever the work needs to happen."
+            }
+        ];
+
+        let sceneIndex = 0;
+        let timer = null;
+        let progressTimer = null;
+
+        function setAgentPositions(positionName) {
+            const selected = positions[positionName];
+            Object.entries(agents).forEach(([name, element]) => {
+                const [left, top] = selected[name];
+                element.style.left = `${left}%`;
+                element.style.top = `${top}%`;
+            });
+        }
+
+        function renderScene(index) {
+            const scene = scenes[index];
+            movie.className = `movie ${scene.className}`;
+            setAgentPositions(scene.positions);
+            captionKicker.textContent = scene.kicker;
+            captionTitle.textContent = scene.title;
+            captionCopy.textContent = scene.copy;
+            progressBar.style.transition = "none";
+            progressBar.style.width = `${(index / scenes.length) * 100}%`;
+            window.setTimeout(() => {
+                progressBar.style.transition = `width ${scene.duration}ms linear`;
+                progressBar.style.width = `${((index + 1) / scenes.length) * 100}%`;
+            }, 40);
+        }
+
+        function playFrom(index) {
+            window.clearTimeout(timer);
+            sceneIndex = index;
+            renderScene(sceneIndex);
+            timer = window.setTimeout(() => {
+                if (sceneIndex < scenes.length - 1) {
+                    playFrom(sceneIndex + 1);
+                }
+            }, scenes[sceneIndex].duration);
+        }
+
+        function restartMovie() {
+            playFrom(0);
+        }
+
+        document.addEventListener("keydown", event => {
+            if (event.key.toLowerCase() === "r") restartMovie();
+        });
+
+        setAgentPositions("lab");
+        playFrom(0);
+    </script>
+</body>
+</html>
