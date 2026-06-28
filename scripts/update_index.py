@@ -16,6 +16,7 @@ METADATA_PATH = ROOT / "scripts" / "demo_metadata.json"
 
 DEMO_ORDER = [
     "POC_to_Cynapsa.html",
+    "cynapsa_sales_movie.html",
     "cynapsa_sales_animation.html",
     "cynapsa_technical_walkthrough.html",
     "4_issues.html",
@@ -31,6 +32,11 @@ DEMO_OVERRIDES = {
         "eyebrow": "Start here",
         "title": "The Evolution of Agentic Networking",
         "description": "Shows the shift from a simple single-environment proof of concept to production reality, where load balancers, API gateways, VPNs, and firewalls create bottlenecks. The final stage introduces the Cynapsa mesh as an identity-native alternative with native agent load balancing.",
+    },
+    "cynapsa_sales_movie.html": {
+        "eyebrow": "Sales movie",
+        "title": "From Agent Demo to Production Mesh",
+        "description": "An auto-playing movie-style explainer showing a multi-agent app moving from one clean environment into production locations, exposing legacy networking gaps, and revealing Cynapsa's zero-trust identity mesh with no application code changes.",
     },
     "cynapsa_sales_animation.html": {
         "eyebrow": "Sales explainer",
