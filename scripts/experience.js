@@ -1,28 +1,30 @@
 (() => {
     const scenes = [
         {
-            kicker: "01 · The challenge",
-            title: "Your agents have outgrown the sandbox",
+            id: "old-network",
+            kicker: "01 · The old network paradigm",
+            title: "More agents should not mean more network engineering",
             body: {
-                business: "A proof of concept works because every agent lives inside one trusted environment. Production splits the workflow across clouds, private networks, customer sites, and edge locations.",
-                architecture: "Agent frameworks define the conversation, but assume reachability. Firewalls, NAT, private address space, and separate administrative domains break that assumption in production."
+                business: "Traditional connectivity joins environments with VPNs, SD-WAN, gateways, subnet plans, routes, firewall policies, and load balancers. Every new agent location expands the project and the operating bill.",
+                architecture: "Network-centric designs manage address space, tunnels, routes, certificates, ingress rules, failure domains, and ownership boundaries. Dynamic agent identity and churn create a different coordination problem."
             },
             points: {
-                business: ["One workflow now crosses several trust boundaries", "Traditional fixes add gateways, VPNs, and operational delay"],
-                architecture: ["Frameworks solve Layer 7 interaction, not private reachability", "IP and location are unstable identities for autonomous agents"]
+                business: ["Configuration work grows with every environment and trust boundary", "The cost includes both initial integration and continuous operations"],
+                architecture: ["Overlapping subnets and separate owners complicate routing", "Network access is broader and more static than agent-level authorization"]
             },
-            architecture: "The gray paths represent the infrastructure teams typically assemble after the prototype: firewall rules, gateways, VPNs, load balancers, and public endpoints. The architecture becomes the bottleneck before the agent logic does.",
-            stageEyebrow: "Production reality",
-            stageTitle: "Agents cross network boundaries",
-            takeaway: "A working prototype is only the beginning. Production agents need cross-environment connectivity.",
-            explainer: "Each box is a different environment. The agents can cooperate in a lab, but production networking prevents them from reaching one another without new infrastructure and exposure."
+            architecture: "The gray topology shows the infrastructure commonly assembled around a distributed workflow. These tools remain useful, but making every agent relationship a network project creates configuration, security, and operations work that grows with the topology.",
+            stageEyebrow: "The old network tax",
+            stageTitle: "VPNs, routes, subnets, firewalls, repeat",
+            takeaway: "Connect agent identities, not another collection of network segments.",
+            explainer: "Each environment needs address planning, a tunnel or gateway, routes, firewall approvals, monitoring, and failure handling. Cynapsa keeps the underlying networks in place but removes the need to redesign them for every agent relationship."
         },
         {
+            id: "identity",
             kicker: "02 · Identity",
             title: "Start with who, not where",
             body: {
-                business: "Cynapsa gives every agent a governed identity. Policy decides which agents may communicate, regardless of the cloud, address, cluster, or customer environment where they run.",
-                architecture: "Enrollment binds runtime authentication to an individual agent identity. The control plane uses that identity for membership, discovery, authorization, and targeted revocation."
+                business: "Cynapsa gives each logical agent a governed identity. Policy decides which agents may communicate, regardless of the cloud, address, cluster, or customer environment where they run.",
+                architecture: "Enrollment binds runtime authentication to a logical agent identity and independently authorized installation. The control plane uses those identities for membership, discovery, authorization, and targeted revocation."
             },
             points: {
                 business: ["Trust follows the agent across environments", "Unknown and unauthorized agents stay isolated"],
@@ -32,27 +34,47 @@
             stageEyebrow: "Identity-native networking",
             stageTitle: "Every agent becomes a governed network identity",
             takeaway: "Identity and policy determine who may communicate. Network location does not create trust.",
-            explainer: "The purple control signals establish the identity and permissions of every agent. The same identity remains meaningful when an agent changes IP address or moves between environments."
+            explainer: "The purple control signals establish the identity and permissions of every agent. A logical identity remains meaningful when an agent changes IP address or runs as multiple authorized instances."
         },
         {
+            id: "connectivity",
             kicker: "03 · Connectivity",
             title: "Coordinate centrally. Communicate directly",
             body: {
-                business: "The control plane establishes who may connect. Authorized agents then exchange application traffic over a preferred peer path, so the decision system does not need to carry every payload.",
-                architecture: "Cynapsa coordinates identity, policy, discovery, and session establishment through its control plane, then establishes the preferred P2P data path across private network boundaries and NAT."
+                business: "The control plane establishes who may connect. Authorized agents then exchange application traffic over the preferred available path, so the decision system does not need to carry every payload.",
+                architecture: "Cynapsa coordinates identity, policy, discovery, and session establishment through its control plane, then prefers a peer data path across private network boundaries and NAT, with encrypted fallback when conditions require it."
             },
             points: {
                 business: ["Application traffic stays on the most appropriate secure path", "Nearby agents do not need to hairpin through a collaboration platform"],
                 architecture: ["Purple dashed lines are control-plane coordination", "Solid lime paths carry authorized application traffic"]
             },
-            architecture: "The diagram separates control and data visually. The control plane coordinates the relationship. The preferred data path connects authorized peers directly and remains encrypted.",
+            architecture: "The diagram separates control and data visually. The control plane coordinates the relationship. The preferred data path connects authorized peers and stays encrypted; NAT or firewall conditions can require an encrypted relay or durable fallback.",
             stageEyebrow: "Control plane and data plane",
-            stageTitle: "Policy above. Peer application traffic below",
-            takeaway: "The control plane authorizes the relationship. Application traffic follows the preferred peer path.",
-            explainer: "Purple lines coordinate identity and policy. Lime lines carry the agent workflow. Notice that the lime path connects agents without passing through the control plane."
+            stageTitle: "Policy above. Application traffic below",
+            takeaway: "The control plane authorizes the relationship. Application traffic follows the preferred available path.",
+            explainer: "Purple lines coordinate identity and policy. Lime lines carry the agent workflow. The preferred path connects authorized peers without forcing the control plane to carry the payload."
         },
         {
-            kicker: "04 · Data locality",
+            id: "firewall",
+            kicker: "04 · Security posture",
+            title: "Connect across boundaries. Keep inbound ports closed",
+            body: {
+                business: "Cynapsa connects authorized agents without requiring an inbound firewall port to be opened for the agent service. Existing private boundaries stay private.",
+                architecture: "Agents initiate the required outbound connectivity. The control plane authenticates and authorizes the relationship, then coordinates a permitted bidirectional application path while unsolicited inbound access remains blocked."
+            },
+            points: {
+                business: ["No new public agent endpoint to expose or defend", "Reduce firewall change requests and inbound attack surface"],
+                architecture: ["Connection establishment is outbound initiated", "Established paths support bidirectional application exchange"]
+            },
+            architecture: "The firewall boundaries remain visibly closed throughout the simulation. An unsolicited attempt stops at the boundary. Authorized agents establish the required connectivity from inside their environments, and policy governs the resulting relationship.",
+            stageEyebrow: "Closed-firewall deployment",
+            stageTitle: "No inbound port opening required",
+            takeaway: "Agents initiate connectivity from inside their environments. Unsolicited inbound access stays blocked.",
+            explainer: "Try the unsolicited attempt first, then establish an authorized connection. Outbound-initiated does not mean one-way application traffic: once established and authorized, the path supports bidirectional exchange."
+        },
+        {
+            id: "locality",
+            kicker: "05 · Data locality",
             title: "Move the agent, not the data",
             body: {
                 business: "Moving raw data to a remote agent creates new copies, expands exposure, and complicates privacy, residency, retention, and compliance. Cynapsa lets the agent run beside the governed data and return only the permitted result.",
@@ -69,7 +91,8 @@
             explainer: "Compare the two paths. Moving raw data outward expands the security, privacy, residency, retention, and audit surface. With Cynapsa, the agent executes beside the private source and only the permitted result leaves."
         },
         {
-            kicker: "05 · Microsegmentation",
+            id: "microsegmentation",
+            kicker: "06 · Microsegmentation",
             title: "Apply authorization even between local agents",
             body: {
                 business: "Agents on the same machine or VPC can often reach one another simply because the network considers them local. Cynapsa removes that implicit trust and allows only the agent relationships the workflow requires.",
@@ -79,14 +102,33 @@
                 business: ["A compromised local agent cannot wander through neighboring agents", "Revoke one identity without interrupting unrelated workflows"],
                 architecture: ["Microsegmentation applies to agent identities, not shared subnets", "The control plane authorizes local and remote relationships consistently"]
             },
-            architecture: "The left panel shows location-based trust inside one VPC or machine, where local reachability can create lateral access. The right panel shows the same agents under Cynapsa: every identity coordinates with the control plane, only the approved B4-to-C7 relationship is established, and the secrets agent remains blocked.",
+            architecture: "The left panel shows location-based trust inside one VPC or machine. The right panel shows the same agents under Cynapsa: every identity coordinates with the control plane, only the approved B4-to-C7 relationship is established, and the secrets agent remains blocked.",
             stageEyebrow: "Agent microsegmentation",
             stageTitle: "Same machine does not mean same trust",
             takeaway: "Cynapsa requires identity authorization even for agents sharing a machine, subnet, or VPC.",
-            explainer: "The left panel shows why network proximity is risky: all three agents are locally reachable. The right panel shows Cynapsa identity policy. Use Revoke to remove Worker B4's approved path to Data C7 while the control plane continues governing every other identity."
+            explainer: "The left panel shows why network proximity is risky: all three agents are locally reachable. The right panel shows Cynapsa identity policy. Use Revoke to remove Worker B4's approved path to Data C7 while every other identity stays governed independently."
         },
         {
-            kicker: "06 · Deployment",
+            id: "resilience",
+            kicker: "07 · Built-in resilience",
+            title: "One identity. Multiple agents. Work keeps moving",
+            body: {
+                business: "Run multiple authorized instances behind the same logical agent identity. Choose balanced operation to spread new work, or active-passive operation to keep a standby ready for failover.",
+                architecture: "Each instance keeps a distinct authorized attachment while sharing the logical destination identity. Replica policy selects a healthy exact endpoint for new requests and preserves the caller's destination identity when an instance fails."
+            },
+            points: {
+                business: ["Add capacity without changing the calling workflow", "Keep new requests moving when an instance becomes unavailable"],
+                architecture: ["Logical identity is shared; instance resources remain distinct", "Failover reroutes subsequent requests after failure detection"]
+            },
+            architecture: "Balanced mode distributes illustrative new requests across healthy instances. Active-passive mode sends work to the active instance until failure is detected, then promotes the standby. The visual does not claim in-flight recovery, application-state replication, or zero downtime.",
+            stageEyebrow: "Identity-native availability",
+            stageTitle: "Scale and fail over behind one identity",
+            takeaway: "The caller keeps one destination identity while Cynapsa routes new work to a healthy authorized instance.",
+            explainer: "Switch between Balanced and Active-passive. Send a few requests, take the active instance offline, and send again. The instance changes; the destination identity used by the caller does not."
+        },
+        {
+            id: "deployment",
+            kicker: "08 · Deployment",
             title: "Change the connectivity. Keep your code",
             body: {
                 business: "Cynapsa adds the missing network layer beneath the existing agent application. Teams can connect distributed agents without rewriting the business logic that already works.",
@@ -153,11 +195,22 @@
     const allowPolicyButton = document.querySelector('[data-action="allow-policy"]');
     const revokePolicyButton = document.querySelector('[data-action="revoke-policy"]');
     const policyStatusText = document.getElementById("policy-status-text");
+    const firewallRelationship = document.getElementById("firewall-relationship");
+    const resilienceModeButtons = [...document.querySelectorAll("button[data-resilience-mode]")];
+    const replicaCards = [...document.querySelectorAll("[data-replica]")];
+    const resilienceStatusText = document.getElementById("resilience-status-text");
 
     let currentScene = 0;
     let currentLens = "business";
     let autoplayTimer = null;
     let isPlaying = false;
+    let resilienceMode = "balanced";
+    let resilienceState = "healthy";
+    let requestCounts = { a: 0, b: 0, c: 0 };
+
+    function currentSceneId() {
+        return scenes[currentScene].id;
+    }
 
     function setPolicyState(state) {
         const revoked = state === "revoked";
@@ -170,17 +223,91 @@
             ? "Worker B4 access to Data C7: revoked"
             : "Worker B4 may access Data C7";
 
-        if (currentScene === 4) {
+        if (currentSceneId() === "microsegmentation") {
             stageTakeaway.textContent = revoked
                 ? "Worker B4 is revoked. Its approved local path disappears while the other agent identities remain governed independently."
-                : scenes[4].takeaway;
+                : scenes[currentScene].takeaway;
         }
+    }
+
+    function setFirewallState(state) {
+        body.dataset.firewallState = state;
+        firewallRelationship.textContent = state === "authorized"
+            ? "Authorized and established"
+            : state === "blocked"
+                ? "Unsolicited attempt blocked"
+                : "Not established";
+
+        if (currentSceneId() === "firewall") {
+            stageTakeaway.textContent = state === "authorized"
+                ? "Authorized agents communicate over an established path while the inbound firewall posture remains closed."
+                : state === "blocked"
+                    ? "The unsolicited attempt is blocked. No public agent endpoint is exposed."
+                    : scenes[currentScene].takeaway;
+        }
+    }
+
+    function renderResilience() {
+        body.dataset.resilienceMode = resilienceMode;
+        body.dataset.resilienceState = resilienceState;
+        resilienceModeButtons.forEach(button => {
+            const active = button.dataset.resilienceMode === resilienceMode;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
+
+        replicaCards.forEach(card => {
+            const key = card.dataset.replica;
+            const role = card.querySelector(".replica-role");
+            const detail = card.querySelector("small");
+            card.querySelector("b").textContent = String(requestCounts[key]);
+            card.classList.toggle("is-offline", key === "a" && resilienceState === "degraded");
+            card.classList.toggle("is-promoted", key === "b" && resilienceMode === "active-passive" && resilienceState === "degraded");
+
+            if (key === "a") {
+                role.textContent = resilienceState === "degraded" ? "OFFLINE" : "ACTIVE";
+                detail.textContent = resilienceState === "degraded" ? "AWS · unavailable" : "AWS · healthy";
+            } else if (resilienceMode === "active-passive") {
+                role.textContent = key === "b" && resilienceState === "degraded" ? "PROMOTED" : "STANDBY";
+            } else {
+                role.textContent = "ACTIVE";
+            }
+        });
+
+        resilienceStatusText.textContent = resilienceState === "degraded"
+            ? resilienceMode === "active-passive"
+                ? "Instance A is unavailable. Instance B is active for subsequent requests."
+                : "Instance A is unavailable. Subsequent requests use healthy instances B and C."
+            : resilienceMode === "active-passive"
+                ? "Instance A is active. Instances B and C are ready as standby capacity."
+                : "Three healthy instances are eligible for new requests.";
+    }
+
+    function setResilienceMode(mode) {
+        resilienceMode = mode;
+        resilienceState = "healthy";
+        requestCounts = { a: 0, b: 0, c: 0 };
+        renderResilience();
+    }
+
+    function sendRequests() {
+        const eligible = resilienceMode === "active-passive"
+            ? [resilienceState === "degraded" ? "b" : "a"]
+            : resilienceState === "degraded" ? ["b", "c"] : ["a", "b", "c"];
+        for (let index = 0; index < 6; index += 1) {
+            requestCounts[eligible[index % eligible.length]] += 1;
+        }
+        body.classList.remove("requests-moving");
+        window.requestAnimationFrame(() => body.classList.add("requests-moving"));
+        window.setTimeout(() => body.classList.remove("requests-moving"), 1500);
+        renderResilience();
     }
 
     function renderScene(index, options = {}) {
         currentScene = (index + scenes.length) % scenes.length;
         const scene = scenes[currentScene];
         body.dataset.scene = String(currentScene);
+        body.dataset.sceneId = scene.id;
 
         sceneKicker.textContent = scene.kicker;
         sceneTitle.textContent = scene.title;
@@ -207,6 +334,8 @@
         progressLabel.textContent = `${currentScene + 1} / ${scenes.length}`;
 
         setPolicyState("allowed");
+        setFirewallState("idle");
+        if (scene.id === "resilience") setResilienceMode("balanced");
 
         if (currentLens === "architecture") architectureDetail.open = true;
         if (options.focus) document.getElementById("architecture-stage").focus({ preventScroll: true });
@@ -270,6 +399,19 @@
 
     allowPolicyButton.addEventListener("click", () => setPolicyState("allowed"));
     revokePolicyButton.addEventListener("click", () => setPolicyState("revoked"));
+    document.querySelector('[data-action="attempt-inbound"]').addEventListener("click", () => setFirewallState("blocked"));
+    document.querySelector('[data-action="authorize-path"]').addEventListener("click", () => setFirewallState("authorized"));
+    document.querySelector('[data-action="reset-firewall"]').addEventListener("click", () => setFirewallState("idle"));
+    resilienceModeButtons.forEach(button => button.addEventListener("click", () => setResilienceMode(button.dataset.resilienceMode)));
+    document.querySelector('[data-action="send-requests"]').addEventListener("click", sendRequests);
+    document.querySelector('[data-action="fail-instance"]').addEventListener("click", () => {
+        resilienceState = "degraded";
+        renderResilience();
+    });
+    document.querySelector('[data-action="restore-instances"]').addEventListener("click", () => {
+        resilienceState = "healthy";
+        renderResilience();
+    });
 
     document.querySelectorAll("[data-alternative]").forEach(tab => tab.addEventListener("click", () => {
         const item = alternatives[tab.dataset.alternative];

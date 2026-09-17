@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ccircle cx='20' cy='32' r='6' fill='%23cfff00'/%3E%3Ccircle cx='44' cy='20' r='6' fill='%23ab77ff'/%3E%3Ccircle cx='44' cy='44' r='6' fill='%23fff'/%3E%3Cpath d='M25 29l13-7M25 35l13 7' stroke='%23cfff00' stroke-width='3'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="./styles/experience.css">
 </head>
-<body data-scene="0" data-lens="business" data-policy-state="allowed">
+<body data-scene="0" data-scene-id="old-network" data-lens="business" data-policy-state="allowed" data-firewall-state="idle" data-resilience-mode="balanced" data-resilience-state="healthy">
     <a class="skip-link" href="#experience">Skip to the experience</a>
 
     <header class="site-header">
@@ -55,17 +55,19 @@
         <section class="experience" id="experience" aria-labelledby="experience-title">
             <aside class="story-panel">
                 <div class="story-intro">
-                    <p class="eyebrow">A six-part walkthrough</p>
+                    <p class="eyebrow">An eight-part walkthrough</p>
                     <h2 id="experience-title">How Cynapsa changes the network beneath your agents</h2>
                 </div>
 
                 <ol class="chapter-list" aria-label="Story chapters">
-                    <li><button type="button" class="chapter-button is-active" data-scene-target="0"><span>01</span><strong>The production gap</strong></button></li>
+                    <li><button type="button" class="chapter-button is-active" data-scene-target="0"><span>01</span><strong>The old network tax</strong></button></li>
                     <li><button type="button" class="chapter-button" data-scene-target="1"><span>02</span><strong>Agent identity</strong></button></li>
                     <li><button type="button" class="chapter-button" data-scene-target="2"><span>03</span><strong>Direct connectivity</strong></button></li>
-                    <li><button type="button" class="chapter-button" data-scene-target="3"><span>04</span><strong>Data locality</strong></button></li>
-                    <li><button type="button" class="chapter-button" data-scene-target="4"><span>05</span><strong>Microsegmentation</strong></button></li>
-                    <li><button type="button" class="chapter-button" data-scene-target="5"><span>06</span><strong>No code change</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="3"><span>04</span><strong>Closed firewalls</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="4"><span>05</span><strong>Data locality</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="5"><span>06</span><strong>Microsegmentation</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="6"><span>07</span><strong>Built-in resilience</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="7"><span>08</span><strong>No code change</strong></button></li>
                 </ol>
 
                 <article class="scene-copy" aria-live="polite">
@@ -92,7 +94,7 @@
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
                     </button>
                     <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
-                    <span class="progress-label" id="progress-label">1 / 6</span>
+                    <span class="progress-label" id="progress-label">1 / 8</span>
                 </div>
             </aside>
 
@@ -167,9 +169,11 @@
                             <path class="legacy-line legacy-three" d="M230 510 C365 475 430 390 500 325"/>
                             <path class="legacy-line legacy-four" d="M770 510 C635 475 570 390 500 325"/>
                             <g class="legacy-hub">
-                                <circle cx="500" cy="325" r="48"/>
-                                <text x="500" y="320">LEGACY</text>
-                                <text x="500" y="340">STACK</text>
+                                <circle cx="500" cy="325" r="62"/>
+                                <text x="500" y="300">VPN / SD-WAN</text>
+                                <text x="500" y="320">SUBNETS + ROUTES</text>
+                                <text x="500" y="340">FIREWALL RULES</text>
+                                <text x="500" y="360">LOAD BALANCERS</text>
                             </g>
                             <g class="blocked-marker blocked-one" transform="translate(350 263)"><circle r="15"/><path d="M-7-7L7 7M7-7L-7 7"/></g>
                             <g class="blocked-marker blocked-two" transform="translate(650 263)"><circle r="15"/><path d="M-7-7L7 7M7-7L-7 7"/></g>
@@ -190,6 +194,46 @@
                             <g class="blocked-marker" transform="translate(500 370)"><circle r="18"/><path d="M-8-8L8 8M8-8L-8 8"/></g>
                         </g>
                     </svg>
+
+                    <div class="legacy-cost-stack" aria-hidden="true">
+                        <span>Every new environment adds work</span>
+                        <div><i>01</i><strong>Address space</strong><small>Plan non-overlapping subnets</small></div>
+                        <div><i>02</i><strong>Tunnels + routes</strong><small>Coordinate VPN / SD-WAN paths</small></div>
+                        <div><i>03</i><strong>Security changes</strong><small>Approve firewall and endpoint exposure</small></div>
+                        <div><i>04</i><strong>Operations</strong><small>Monitor, repair, and scale the network</small></div>
+                    </div>
+
+                    <div class="firewall-layer scene-layer">
+                        <div class="firewall-diagram">
+                            <article class="firewall-zone firewall-zone-cloud">
+                                <span class="zone-label">CLOUD VPC</span>
+                                <div class="firewall-agent"><i>A1</i><strong>Planner</strong><small>verified identity</small></div>
+                                <div class="firewall-boundary"><span>FIREWALL</span><b>INBOUND CLOSED</b></div>
+                            </article>
+                            <div class="firewall-middle">
+                                <div class="unsolicited-probe"><span>UNSOLICITED</span><b>×</b></div>
+                                <div class="firewall-control-node"><i>CP</i><strong>Identity + policy</strong><small>Connection coordination</small></div>
+                                <div class="outbound-signal outbound-left"><span>OUTBOUND</span></div>
+                                <div class="outbound-signal outbound-right"><span>OUTBOUND</span></div>
+                                <div class="authorized-tunnel"><span>AUTHORIZED BIDIRECTIONAL PATH</span></div>
+                            </div>
+                            <article class="firewall-zone firewall-zone-private">
+                                <span class="zone-label">PRIVATE / CUSTOMER NETWORK</span>
+                                <div class="firewall-agent"><i>B4</i><strong>Worker</strong><small>verified identity</small></div>
+                                <div class="firewall-boundary"><span>FIREWALL</span><b>INBOUND CLOSED</b></div>
+                            </article>
+                        </div>
+                        <div class="firewall-posture">
+                            <div><span>Inbound port opening</span><strong>Not required</strong></div>
+                            <div><span>Agent coordination</span><strong>Outbound initiated</strong></div>
+                            <div><span>Relationship</span><strong id="firewall-relationship">Not established</strong></div>
+                        </div>
+                        <div class="firewall-actions" role="group" aria-label="Firewall simulation">
+                            <button type="button" data-action="attempt-inbound">Attempt unsolicited access</button>
+                            <button type="button" data-action="authorize-path">Establish authorized connection</button>
+                            <button type="button" data-action="reset-firewall">Replay</button>
+                        </div>
+                    </div>
 
                     <div class="locality-layer scene-layer">
                         <article class="locality-panel locality-risk-panel">
@@ -273,11 +317,43 @@
                         </article>
                     </div>
 
+                    <div class="resilience-layer scene-layer">
+                        <div class="resilience-toolbar">
+                            <div>
+                                <span class="scene-badge scene-badge-cynapsa">LOGICAL DESTINATION</span>
+                                <strong>identity: document-agent</strong>
+                                <small>One stable identity, distinct authorized instances</small>
+                            </div>
+                            <div class="resilience-modes" role="group" aria-label="Replica policy mode">
+                                <button type="button" class="is-active" data-resilience-mode="balanced" aria-pressed="true">Balanced</button>
+                                <button type="button" data-resilience-mode="active-passive" aria-pressed="false">Active-passive</button>
+                            </div>
+                        </div>
+                        <div class="resilience-visual">
+                            <div class="resilience-caller"><i>A1</i><strong>Caller</strong><small>same destination identity</small></div>
+                            <div class="request-stream" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                            <div class="instance-pool">
+                                <article class="replica replica-a" data-replica="a"><span class="replica-role">ACTIVE</span><i>A</i><strong>Instance A</strong><small>AWS · healthy</small><b>0</b></article>
+                                <article class="replica replica-b" data-replica="b"><span class="replica-role">ACTIVE</span><i>B</i><strong>Instance B</strong><small>Private cloud · healthy</small><b>0</b></article>
+                                <article class="replica replica-c" data-replica="c"><span class="replica-role">ACTIVE</span><i>C</i><strong>Instance C</strong><small>Edge · healthy</small><b>0</b></article>
+                            </div>
+                        </div>
+                        <div class="resilience-status"><span class="status-dot"></span><strong id="resilience-status-text">Three healthy instances are eligible for new requests.</strong></div>
+                        <div class="resilience-actions" role="group" aria-label="Resilience simulation">
+                            <button type="button" data-action="send-requests">Send requests</button>
+                            <button type="button" data-action="fail-instance">Take active instance offline</button>
+                            <button type="button" data-action="restore-instances">Restore all</button>
+                        </div>
+                        <p class="simulation-disclaimer">Illustrative routing simulation, not a performance benchmark. Failover applies to subsequent requests after failure detection.</p>
+                    </div>
+
                     <div class="scene-callout callout-challenge"><strong>Connectivity assumed</strong><span>Firewalls, NAT, and private networks break the workflow.</span></div>
                     <div class="scene-callout callout-identity"><strong>Identity replaces location</strong><span>Each agent receives a governed cryptographic identity.</span></div>
                     <div class="scene-callout callout-direct"><strong>Preferred peer data path</strong><span>Authorized agents exchange application traffic directly.</span></div>
+                    <div class="scene-callout callout-firewall"><strong>Inbound stays closed</strong><span>Agents initiate the required outbound connectivity. Unsolicited inbound access remains blocked.</span></div>
                     <div class="scene-callout callout-local"><strong>Bring the agent to the data</strong><span>Only the permitted result leaves the private environment.</span></div>
                     <div class="scene-callout callout-policy"><strong>Policy enforced</strong><span>The revoked agent loses access. Other workflows continue.</span></div>
+                    <div class="scene-callout callout-resilience"><strong>Identity survives instance failure</strong><span>New requests move to a healthy authorized instance after failure detection.</span></div>
                     <div class="scene-callout callout-sdk"><strong>No code change necessary</strong><span>Cynapsa adds the connectivity layer beneath the existing agent logic.</span></div>
 
                     <div class="policy-console">
