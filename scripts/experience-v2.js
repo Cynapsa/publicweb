@@ -349,7 +349,6 @@
 })();
 
 (() => {
-    if (window.__cynapsaControlsBound) return;
     window.__cynapsaControlsBound = true;
 
     const body = document.body;
