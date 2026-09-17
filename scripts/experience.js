@@ -303,6 +303,31 @@
         renderResilience();
     }
 
+    function bindInteractiveControls() {
+        const actions = {
+            "attempt-inbound": () => setFirewallState("blocked"),
+            "authorize-path": () => setFirewallState("authorized"),
+            "reset-firewall": () => setFirewallState("idle"),
+            "send-requests": sendRequests,
+            "fail-instance": () => {
+                resilienceState = "degraded";
+                renderResilience();
+            },
+            "restore-instances": () => {
+                resilienceState = "healthy";
+                renderResilience();
+            }
+        };
+
+        Object.entries(actions).forEach(([action, handler]) => {
+            const button = document.querySelector(`[data-action="${action}"]`);
+            if (button) button.onclick = handler;
+        });
+        resilienceModeButtons.forEach(button => {
+            button.onclick = () => setResilienceMode(button.dataset.resilienceMode);
+        });
+    }
+
     function renderScene(index, options = {}) {
         currentScene = (index + scenes.length) % scenes.length;
         const scene = scenes[currentScene];
@@ -336,6 +361,7 @@
         setPolicyState("allowed");
         setFirewallState("idle");
         if (scene.id === "resilience") setResilienceMode("balanced");
+        bindInteractiveControls();
 
         if (currentLens === "architecture") architectureDetail.open = true;
         if (options.focus) document.getElementById("architecture-stage").focus({ preventScroll: true });
@@ -399,25 +425,6 @@
 
     allowPolicyButton.addEventListener("click", () => setPolicyState("allowed"));
     revokePolicyButton.addEventListener("click", () => setPolicyState("revoked"));
-    document.addEventListener("click", event => {
-        const button = event.target.closest("button");
-        if (!button) return;
-
-        if (button.dataset.action === "attempt-inbound") setFirewallState("blocked");
-        if (button.dataset.action === "authorize-path") setFirewallState("authorized");
-        if (button.dataset.action === "reset-firewall") setFirewallState("idle");
-        if (button.dataset.resilienceMode) setResilienceMode(button.dataset.resilienceMode);
-        if (button.dataset.action === "send-requests") sendRequests();
-        if (button.dataset.action === "fail-instance") {
-            resilienceState = "degraded";
-            renderResilience();
-        }
-        if (button.dataset.action === "restore-instances") {
-            resilienceState = "healthy";
-            renderResilience();
-        }
-    });
-
     document.querySelectorAll("[data-alternative]").forEach(tab => tab.addEventListener("click", () => {
         const item = alternatives[tab.dataset.alternative];
         document.querySelectorAll("[data-alternative]").forEach(other => other.setAttribute("aria-selected", String(other === tab)));
