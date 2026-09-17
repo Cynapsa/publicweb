@@ -53,37 +53,37 @@
         },
         {
             kicker: "04 · Data locality",
-            title: "Bring the agent to the data",
+            title: "Move the agent, not the data",
             body: {
-                business: "Place the agent beside private data and let it return only the permitted result. The raw source remains inside the environment that owns and governs it.",
-                architecture: "A local Cynapsa-connected agent accesses the private data source inside its existing boundary. Policy controls which remote identities may invoke it and which result may return."
+                business: "Moving raw data to a remote agent creates new copies, expands exposure, and complicates privacy, residency, retention, and compliance. Cynapsa lets the agent run beside the governed data and return only the permitted result.",
+                architecture: "A Cynapsa-connected agent runs inside the data owner's existing boundary. The control plane authenticates and authorizes the requester, while the task and permitted result use the approved data path. The raw dataset is not exported."
             },
             points: {
-                business: ["Raw data stays in its original environment", "The workflow can span cloud, on premises, and customer sites"],
-                architecture: ["The local data service does not require public exposure", "Access remains bound to the requesting agent identity"]
+                business: ["Reduce unnecessary data copies and residency exposure", "Keep privacy and compliance controls around the original source"],
+                architecture: ["Raw data remains inside its governed environment", "The agent logic stays unchanged while execution moves beside the data"]
             },
-            architecture: "The highlighted on-premises zone contains both the data agent and the private source. The lime path represents the authorized interaction and response, not movement of the underlying dataset.",
-            stageEyebrow: "Private data access",
-            stageTitle: "The workflow moves. The raw data stays local",
-            takeaway: "Agents can work where private data lives without moving the underlying dataset into a shared cloud service.",
-            explainer: "The data agent runs beside the private system. A remote agent can request an authorized task, but the raw records remain inside the on-premises boundary."
+            architecture: "The left panel shows the risky pattern: raw records cross their governed boundary and become another copy beside a remote agent. The right panel shows Cynapsa placing the same agent logic inside the data boundary. Only the authorized task and permitted result cross the connection.",
+            stageEyebrow: "Security, privacy, and compliance",
+            stageTitle: "Moving data creates risk. Move the agent instead",
+            takeaway: "Cynapsa keeps raw data inside its governed environment and moves authorized agent execution to the data, with no agent code change.",
+            explainer: "Compare the two paths. Moving raw data outward expands the security, privacy, residency, retention, and audit surface. With Cynapsa, the agent executes beside the private source and only the permitted result leaves."
         },
         {
             kicker: "05 · Microsegmentation",
-            title: "Give every connection a reason to exist",
+            title: "Apply authorization even between local agents",
             body: {
-                business: "Cynapsa allows only the relationships required by the workflow. Revoke one agent and its access disappears without interrupting the rest of the network.",
-                architecture: "Agent-level policy denies unauthorized discovery and reachability by default. Targeted revocation removes a compromised identity while unrelated authorized paths continue."
+                business: "Agents on the same machine or VPC can often reach one another simply because the network considers them local. Cynapsa removes that implicit trust and allows only the agent relationships the workflow requires.",
+                architecture: "Local proximity does not bypass identity policy. Each agent authenticates to the Cynapsa control plane, and each requested relationship is authorized before an application path is established, even when both peers share a host or subnet."
             },
             points: {
-                business: ["A compromised agent cannot wander through the environment", "The blast radius stays limited to approved relationships"],
-                architecture: ["Microsegmentation applies to identities, not shared subnets", "Revocation is targeted to the individual agent"]
+                business: ["A compromised local agent cannot wander through neighboring agents", "Revoke one identity without interrupting unrelated workflows"],
+                architecture: ["Microsegmentation applies to agent identities, not shared subnets", "The control plane authorizes local and remote relationships consistently"]
             },
-            architecture: "Use the policy control on the diagram. Revoking Worker B4 removes its approved path to Data C7. Other identities and workflows retain their own independent authorization.",
+            architecture: "The left panel shows location-based trust inside one VPC or machine, where local reachability can create lateral access. The right panel shows the same agents under Cynapsa: every identity coordinates with the control plane, only the approved B4-to-C7 relationship is established, and the secrets agent remains blocked.",
             stageEyebrow: "Agent microsegmentation",
-            stageTitle: "Access is explicit, narrow, and revocable",
-            takeaway: "Proximity does not equal trust. Each agent can reach only the identities its policy allows.",
-            explainer: "The red dashed path shows an unauthorized attempt. Use Revoke to remove the approved Worker-to-Data path while leaving other relationships unchanged."
+            stageTitle: "Same machine does not mean same trust",
+            takeaway: "Cynapsa requires identity authorization even for agents sharing a machine, subnet, or VPC.",
+            explainer: "The left panel shows why network proximity is risky: all three agents are locally reachable. The right panel shows Cynapsa identity policy. Use Revoke to remove Worker B4's approved path to Data C7 while the control plane continues governing every other identity."
         },
         {
             kicker: "06 · Deployment",
@@ -150,17 +150,37 @@
     const lensButtons = [...document.querySelectorAll("[data-lens]")];
     const presentationButtons = [...document.querySelectorAll('[data-action="presentation"]')];
     const architectureDetail = document.getElementById("architecture-detail");
+    const allowPolicyButton = document.querySelector('[data-action="allow-policy"]');
+    const revokePolicyButton = document.querySelector('[data-action="revoke-policy"]');
+    const policyStatusText = document.getElementById("policy-status-text");
 
     let currentScene = 0;
     let currentLens = "business";
     let autoplayTimer = null;
     let isPlaying = false;
 
+    function setPolicyState(state) {
+        const revoked = state === "revoked";
+        body.dataset.policyState = revoked ? "revoked" : "allowed";
+        allowPolicyButton.classList.toggle("is-active", !revoked);
+        revokePolicyButton.classList.toggle("is-active", revoked);
+        allowPolicyButton.setAttribute("aria-pressed", String(!revoked));
+        revokePolicyButton.setAttribute("aria-pressed", String(revoked));
+        policyStatusText.textContent = revoked
+            ? "Worker B4 access to Data C7: revoked"
+            : "Worker B4 may access Data C7";
+
+        if (currentScene === 4) {
+            stageTakeaway.textContent = revoked
+                ? "Worker B4 is revoked. Its approved local path disappears while the other agent identities remain governed independently."
+                : scenes[4].takeaway;
+        }
+    }
+
     function renderScene(index, options = {}) {
         currentScene = (index + scenes.length) % scenes.length;
         const scene = scenes[currentScene];
         body.dataset.scene = String(currentScene);
-        body.classList.remove("policy-revoked");
 
         sceneKicker.textContent = scene.kicker;
         sceneTitle.textContent = scene.title;
@@ -186,8 +206,7 @@
         progressFill.style.width = `${((currentScene + 1) / scenes.length) * 100}%`;
         progressLabel.textContent = `${currentScene + 1} / ${scenes.length}`;
 
-        document.querySelector('[data-action="allow-policy"]').classList.add("is-active");
-        document.querySelector('[data-action="revoke-policy"]').classList.remove("is-active");
+        setPolicyState("allowed");
 
         if (currentLens === "architecture") architectureDetail.open = true;
         if (options.focus) document.getElementById("architecture-stage").focus({ preventScroll: true });
@@ -249,19 +268,8 @@
         event.currentTarget.setAttribute("aria-expanded", String(!stageExplainer.hidden));
     });
 
-    document.querySelector('[data-action="allow-policy"]').addEventListener("click", event => {
-        body.classList.remove("policy-revoked");
-        event.currentTarget.classList.add("is-active");
-        document.querySelector('[data-action="revoke-policy"]').classList.remove("is-active");
-        stageTakeaway.textContent = scenes[4].takeaway;
-    });
-
-    document.querySelector('[data-action="revoke-policy"]').addEventListener("click", event => {
-        body.classList.add("policy-revoked");
-        event.currentTarget.classList.add("is-active");
-        document.querySelector('[data-action="allow-policy"]').classList.remove("is-active");
-        stageTakeaway.textContent = "Worker B4 is revoked. Its approved path disappears while unrelated identities continue operating.";
-    });
+    allowPolicyButton.addEventListener("click", () => setPolicyState("allowed"));
+    revokePolicyButton.addEventListener("click", () => setPolicyState("revoked"));
 
     document.querySelectorAll("[data-alternative]").forEach(tab => tab.addEventListener("click", () => {
         const item = alternatives[tab.dataset.alternative];
