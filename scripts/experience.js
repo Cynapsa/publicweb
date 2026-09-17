@@ -195,18 +195,11 @@
     const allowPolicyButton = document.querySelector('[data-action="allow-policy"]');
     const revokePolicyButton = document.querySelector('[data-action="revoke-policy"]');
     const policyStatusText = document.getElementById("policy-status-text");
-    const firewallRelationship = document.getElementById("firewall-relationship");
-    const resilienceModeButtons = [...document.querySelectorAll("button[data-resilience-mode]")];
-    const replicaCards = [...document.querySelectorAll("[data-replica]")];
-    const resilienceStatusText = document.getElementById("resilience-status-text");
 
     let currentScene = 0;
     let currentLens = "business";
     let autoplayTimer = null;
     let isPlaying = false;
-    let resilienceMode = "balanced";
-    let resilienceState = "healthy";
-    let requestCounts = { a: 0, b: 0, c: 0 };
 
     function currentSceneId() {
         return scenes[currentScene].id;
@@ -228,104 +221,6 @@
                 ? "Worker B4 is revoked. Its approved local path disappears while the other agent identities remain governed independently."
                 : scenes[currentScene].takeaway;
         }
-    }
-
-    function setFirewallState(state) {
-        body.dataset.firewallState = state;
-        firewallRelationship.textContent = state === "authorized"
-            ? "Authorized and established"
-            : state === "blocked"
-                ? "Unsolicited attempt blocked"
-                : "Not established";
-
-        if (currentSceneId() === "firewall") {
-            stageTakeaway.textContent = state === "authorized"
-                ? "Authorized agents communicate over an established path while the inbound firewall posture remains closed."
-                : state === "blocked"
-                    ? "The unsolicited attempt is blocked. No public agent endpoint is exposed."
-                    : scenes[currentScene].takeaway;
-        }
-    }
-
-    function renderResilience() {
-        body.dataset.resilienceMode = resilienceMode;
-        body.dataset.resilienceState = resilienceState;
-        resilienceModeButtons.forEach(button => {
-            const active = button.dataset.resilienceMode === resilienceMode;
-            button.classList.toggle("is-active", active);
-            button.setAttribute("aria-pressed", String(active));
-        });
-
-        replicaCards.forEach(card => {
-            const key = card.dataset.replica;
-            const role = card.querySelector(".replica-role");
-            const detail = card.querySelector("small");
-            card.querySelector("b").textContent = String(requestCounts[key]);
-            card.classList.toggle("is-offline", key === "a" && resilienceState === "degraded");
-            card.classList.toggle("is-promoted", key === "b" && resilienceMode === "active-passive" && resilienceState === "degraded");
-
-            if (key === "a") {
-                role.textContent = resilienceState === "degraded" ? "OFFLINE" : "ACTIVE";
-                detail.textContent = resilienceState === "degraded" ? "AWS · unavailable" : "AWS · healthy";
-            } else if (resilienceMode === "active-passive") {
-                role.textContent = key === "b" && resilienceState === "degraded" ? "PROMOTED" : "STANDBY";
-            } else {
-                role.textContent = "ACTIVE";
-            }
-        });
-
-        resilienceStatusText.textContent = resilienceState === "degraded"
-            ? resilienceMode === "active-passive"
-                ? "Instance A is unavailable. Instance B is active for subsequent requests."
-                : "Instance A is unavailable. Subsequent requests use healthy instances B and C."
-            : resilienceMode === "active-passive"
-                ? "Instance A is active. Instances B and C are ready as standby capacity."
-                : "Three healthy instances are eligible for new requests.";
-    }
-
-    function setResilienceMode(mode) {
-        resilienceMode = mode;
-        resilienceState = "healthy";
-        requestCounts = { a: 0, b: 0, c: 0 };
-        renderResilience();
-    }
-
-    function sendRequests() {
-        const eligible = resilienceMode === "active-passive"
-            ? [resilienceState === "degraded" ? "b" : "a"]
-            : resilienceState === "degraded" ? ["b", "c"] : ["a", "b", "c"];
-        for (let index = 0; index < 6; index += 1) {
-            requestCounts[eligible[index % eligible.length]] += 1;
-        }
-        body.classList.remove("requests-moving");
-        window.requestAnimationFrame(() => body.classList.add("requests-moving"));
-        window.setTimeout(() => body.classList.remove("requests-moving"), 1500);
-        renderResilience();
-    }
-
-    function bindInteractiveControls() {
-        const actions = {
-            "attempt-inbound": () => setFirewallState("blocked"),
-            "authorize-path": () => setFirewallState("authorized"),
-            "reset-firewall": () => setFirewallState("idle"),
-            "send-requests": sendRequests,
-            "fail-instance": () => {
-                resilienceState = "degraded";
-                renderResilience();
-            },
-            "restore-instances": () => {
-                resilienceState = "healthy";
-                renderResilience();
-            }
-        };
-
-        Object.entries(actions).forEach(([action, handler]) => {
-            const button = document.querySelector(`[data-action="${action}"]`);
-            if (button) button.onclick = handler;
-        });
-        resilienceModeButtons.forEach(button => {
-            button.onclick = () => setResilienceMode(button.dataset.resilienceMode);
-        });
     }
 
     function renderScene(index, options = {}) {
@@ -359,9 +254,6 @@
         progressLabel.textContent = `${currentScene + 1} / ${scenes.length}`;
 
         setPolicyState("allowed");
-        setFirewallState("idle");
-        if (scene.id === "resilience") setResilienceMode("balanced");
-        bindInteractiveControls();
 
         if (currentLens === "architecture") architectureDetail.open = true;
         if (options.focus) document.getElementById("architecture-stage").focus({ preventScroll: true });
