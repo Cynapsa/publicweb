@@ -1,5 +1,5 @@
 (() => {
-    document.body.dataset.runtimeVersion = "v5";
+    document.body.dataset.runtimeVersion = "v6";
     const scenes = [
         {
             id: "old-network",
@@ -396,19 +396,29 @@
 
     allowPolicyButton.addEventListener("click", () => setPolicyState("allowed"));
     revokePolicyButton.addEventListener("click", () => setPolicyState("revoked"));
-    document.querySelector('[data-action="attempt-inbound"]').addEventListener("click", () => setFirewallState("blocked"));
-    document.querySelector('[data-action="authorize-path"]').addEventListener("click", () => setFirewallState("authorized"));
-    document.querySelector('[data-action="reset-firewall"]').addEventListener("click", () => setFirewallState("idle"));
-    resilienceModeButtons.forEach(button => button.addEventListener("click", () => resetResilience(button.dataset.resilienceMode)));
-    document.querySelector('[data-action="send-requests"]').addEventListener("click", sendRequests);
-    document.querySelector('[data-action="fail-instance"]').addEventListener("click", () => {
-        resilienceState = "degraded";
-        renderResilience();
+    document.addEventListener("click", event => {
+        const modeButton = event.target.closest("button[data-resilience-mode]");
+        if (modeButton) resetResilience(modeButton.dataset.resilienceMode);
+
+        const actionButton = event.target.closest("button[data-action]");
+        if (!actionButton) return;
+        const handlers = {
+            "attempt-inbound": () => setFirewallState("blocked"),
+            "authorize-path": () => setFirewallState("authorized"),
+            "reset-firewall": () => setFirewallState("idle"),
+            "send-requests": sendRequests,
+            "fail-instance": () => {
+                resilienceState = "degraded";
+                renderResilience();
+            },
+            "restore-instances": () => {
+                resilienceState = "healthy";
+                renderResilience();
+            }
+        };
+        handlers[actionButton.dataset.action]?.();
     });
-    document.querySelector('[data-action="restore-instances"]').addEventListener("click", () => {
-        resilienceState = "healthy";
-        renderResilience();
-    });
+    body.dataset.controlsReady = "true";
     document.querySelectorAll("[data-alternative]").forEach(tab => tab.addEventListener("click", () => {
         const item = alternatives[tab.dataset.alternative];
         document.querySelectorAll("[data-alternative]").forEach(other => other.setAttribute("aria-selected", String(other === tab)));
