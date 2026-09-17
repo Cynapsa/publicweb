@@ -1,4 +1,5 @@
 (() => {
+    document.body.dataset.runtimeVersion = "v5";
     const scenes = [
         {
             id: "old-network",
