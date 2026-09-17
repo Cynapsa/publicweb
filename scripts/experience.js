@@ -399,18 +399,23 @@
 
     allowPolicyButton.addEventListener("click", () => setPolicyState("allowed"));
     revokePolicyButton.addEventListener("click", () => setPolicyState("revoked"));
-    document.querySelector('[data-action="attempt-inbound"]').addEventListener("click", () => setFirewallState("blocked"));
-    document.querySelector('[data-action="authorize-path"]').addEventListener("click", () => setFirewallState("authorized"));
-    document.querySelector('[data-action="reset-firewall"]').addEventListener("click", () => setFirewallState("idle"));
-    resilienceModeButtons.forEach(button => button.addEventListener("click", () => setResilienceMode(button.dataset.resilienceMode)));
-    document.querySelector('[data-action="send-requests"]').addEventListener("click", sendRequests);
-    document.querySelector('[data-action="fail-instance"]').addEventListener("click", () => {
-        resilienceState = "degraded";
-        renderResilience();
-    });
-    document.querySelector('[data-action="restore-instances"]').addEventListener("click", () => {
-        resilienceState = "healthy";
-        renderResilience();
+    document.addEventListener("click", event => {
+        const button = event.target.closest("button");
+        if (!button) return;
+
+        if (button.dataset.action === "attempt-inbound") setFirewallState("blocked");
+        if (button.dataset.action === "authorize-path") setFirewallState("authorized");
+        if (button.dataset.action === "reset-firewall") setFirewallState("idle");
+        if (button.dataset.resilienceMode) setResilienceMode(button.dataset.resilienceMode);
+        if (button.dataset.action === "send-requests") sendRequests();
+        if (button.dataset.action === "fail-instance") {
+            resilienceState = "degraded";
+            renderResilience();
+        }
+        if (button.dataset.action === "restore-instances") {
+            resilienceState = "healthy";
+            renderResilience();
+        }
     });
 
     document.querySelectorAll("[data-alternative]").forEach(tab => tab.addEventListener("click", () => {
