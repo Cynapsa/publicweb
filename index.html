@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ccircle cx='20' cy='32' r='6' fill='%23cfff00'/%3E%3Ccircle cx='44' cy='20' r='6' fill='%23ab77ff'/%3E%3Ccircle cx='44' cy='44' r='6' fill='%23fff'/%3E%3Cpath d='M25 29l13-7M25 35l13 7' stroke='%23cfff00' stroke-width='3'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="./styles/experience.css">
 </head>
-<body data-scene="0" data-lens="business">
+<body data-scene="0" data-lens="business" data-policy-state="allowed">
     <a class="skip-link" href="#experience">Skip to the experience</a>
 
     <header class="site-header">
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="topology" aria-hidden="true">
+                <div class="topology">
                     <div class="grid-glow"></div>
 
                     <div class="control-plane">
@@ -191,6 +191,88 @@
                         </g>
                     </svg>
 
+                    <div class="locality-layer scene-layer">
+                        <article class="locality-panel locality-risk-panel">
+                            <header>
+                                <span class="scene-badge scene-badge-risk">COMMON WORKAROUND</span>
+                                <strong>Move data to the agent</strong>
+                                <p>Raw records leave their governed boundary and create another sensitive copy.</p>
+                            </header>
+                            <div class="data-move-flow">
+                                <div class="data-source-card">
+                                    <span class="data-lock"></span>
+                                    <div><strong>Private records</strong><small>Governed environment</small></div>
+                                </div>
+                                <div class="raw-data-rail"><span>RAW DATA COPY</span></div>
+                                <div class="remote-agent-card">
+                                    <i>AI</i>
+                                    <div><strong>Remote agent</strong><small>New data location</small></div>
+                                </div>
+                            </div>
+                            <div class="risk-chips">
+                                <span>Security exposure</span>
+                                <span>Privacy scope</span>
+                                <span>Residency and retention</span>
+                            </div>
+                        </article>
+
+                        <article class="locality-panel locality-solution-panel">
+                            <header>
+                                <span class="scene-badge scene-badge-cynapsa">CYNAPSA</span>
+                                <strong>Move the agent to the data</strong>
+                                <p>The agent runs beside the source. Raw records remain under existing controls.</p>
+                            </header>
+                            <div class="local-execution-flow">
+                                <div class="remote-request-card"><i>A1</i><strong>Requester</strong></div>
+                                <div class="result-rail"><span>TASK + PERMITTED RESULT</span></div>
+                                <div class="governed-boundary">
+                                    <span class="boundary-label">GOVERNED DATA ENVIRONMENT</span>
+                                    <div class="local-agent-card"><i>AI</i><strong>Same agent logic</strong></div>
+                                    <div class="local-data-card"><span class="data-lock"></span><strong>Raw data stays here</strong></div>
+                                </div>
+                            </div>
+                            <div class="no-code-chip">NO AGENT CODE CHANGE</div>
+                        </article>
+                    </div>
+
+                    <div class="microsegmentation-layer scene-layer">
+                        <article class="micro-panel micro-before">
+                            <header>
+                                <span class="scene-badge scene-badge-risk">LOCATION-BASED TRUST</span>
+                                <strong>Same VPC or machine</strong>
+                                <p>Local reachability can become lateral access between neighboring agents.</p>
+                            </header>
+                            <div class="shared-local-zone">
+                                <span class="zone-label">SHARED LOCAL NETWORK</span>
+                                <svg class="local-access-lines" viewBox="0 0 500 180" preserveAspectRatio="none">
+                                    <path d="M100 105 L250 55 L400 105 L100 105 M250 55 L250 145 M100 105 L250 145 L400 105"/>
+                                </svg>
+                                <div class="local-agent local-agent-one"><i>B4</i><strong>Worker</strong></div>
+                                <div class="local-agent local-agent-two"><i>C7</i><strong>Data</strong></div>
+                                <div class="local-agent local-agent-three"><i>S9</i><strong>Secrets</strong></div>
+                            </div>
+                            <p class="panel-note panel-note-risk">Reachable by location, without a per-agent authorization decision.</p>
+                        </article>
+
+                        <article class="micro-panel micro-after">
+                            <header>
+                                <span class="scene-badge scene-badge-cynapsa">IDENTITY MICROSEGMENTATION</span>
+                                <strong>Every local relationship is authorized</strong>
+                                <p>Sharing a host, subnet, or VPC grants no automatic agent access.</p>
+                            </header>
+                            <div class="shared-local-zone protected-local-zone">
+                                <span class="zone-label">SAME SHARED LOCAL NETWORK</span>
+                                <div class="authorization-gate">CONTROL PLANE: IDENTITY + AUTHORIZATION</div>
+                                <div class="approved-local-path"><span>ALLOWED</span></div>
+                                <div class="denied-local-path"><span>BLOCKED</span></div>
+                                <div class="local-agent local-agent-one"><i>B4</i><strong>Worker</strong><small>verified</small></div>
+                                <div class="local-agent local-agent-two"><i>C7</i><strong>Data</strong><small>verified</small></div>
+                                <div class="local-agent local-agent-three"><i>S9</i><strong>Secrets</strong><small>verified</small></div>
+                            </div>
+                            <p class="panel-note">Only the B4 to C7 identity relationship is approved.</p>
+                        </article>
+                    </div>
+
                     <div class="scene-callout callout-challenge"><strong>Connectivity assumed</strong><span>Firewalls, NAT, and private networks break the workflow.</span></div>
                     <div class="scene-callout callout-identity"><strong>Identity replaces location</strong><span>Each agent receives a governed cryptographic identity.</span></div>
                     <div class="scene-callout callout-direct"><strong>Preferred peer data path</strong><span>Authorized agents exchange application traffic directly.</span></div>
@@ -200,10 +282,10 @@
 
                     <div class="policy-console">
                         <div><span class="status-dot"></span><strong>Policy simulation</strong></div>
-                        <p>Worker B4 may access Data C7</p>
+                        <p id="policy-status-text">Worker B4 may access Data C7</p>
                         <div class="policy-actions">
-                            <button type="button" data-action="allow-policy" class="is-active">Allow</button>
-                            <button type="button" data-action="revoke-policy">Revoke</button>
+                            <button type="button" data-action="allow-policy" class="is-active" aria-pressed="true">Allow</button>
+                            <button type="button" data-action="revoke-policy" aria-pressed="false">Revoke</button>
                         </div>
                     </div>
 
