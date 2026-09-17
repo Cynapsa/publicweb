@@ -807,6 +807,7 @@ body[data-scene-id="microsegmentation"] .callout-policy { display: none; }
 .scene-callout {
     position: absolute;
     z-index: 7;
+    pointer-events: none;
     width: 245px;
     padding: 11px 13px;
     border-radius: 10px;
