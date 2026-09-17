@@ -147,7 +147,7 @@
     const playButton = document.querySelector('[data-action="play"]');
     const playLabel = playButton.querySelector("span");
     const chapterButtons = [...document.querySelectorAll("[data-scene-target]")];
-    const lensButtons = [...document.querySelectorAll("[data-lens]")];
+    const lensButtons = [...document.querySelectorAll("button[data-lens]")];
     const presentationButtons = [...document.querySelectorAll('[data-action="presentation"]')];
     const architectureDetail = document.getElementById("architecture-detail");
     const allowPolicyButton = document.querySelector('[data-action="allow-policy"]');
