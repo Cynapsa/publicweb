@@ -641,7 +641,8 @@ body[data-scene-id="resilience"] .control-plane { opacity: 0; pointer-events: no
 .replica small { color: #8f8893; font-size: 6px; text-align: center; }
 .replica b { min-width: 25px; padding: 3px 6px; border-radius: 999px; color: var(--ink); background: var(--lime); font-size: 7px; text-align: center; }
 .replica b::after { content: " req"; }
-.replica.is-offline { opacity: .38; border-color: var(--danger); filter: grayscale(1); }
+.replica.is-offline { opacity: 1; border-color: var(--danger); background: rgba(255,107,100,.045); }
+.replica.is-offline > *:not(.replica-role) { opacity: .34; filter: grayscale(1); }
 .replica.is-offline .replica-role { color: var(--danger); }
 .replica.is-promoted { border-color: var(--purple); box-shadow: 0 0 24px rgba(171,119,255,.13); transform: translateY(-3px); }
 body[data-resilience-mode="active-passive"] .replica:not(.is-promoted):not(.replica-a) { border-style: dashed; opacity: .68; }
@@ -1009,6 +1010,7 @@ body[data-scene-id="deployment"] .callout-sdk { display: none; }
 .site-footer a { margin-left: auto; color: var(--lime); font-size: 11px; font-weight: 850; text-decoration: none; }
 
 .presentation-help { display: none; }
+.presentation-toolbar { display: none; }
 
 /* Presentation-grade walkthrough graphics */
 .stage-header {
@@ -1573,6 +1575,48 @@ body.presentation-mode .stage-footer { height: 15vh; padding: 2vh 4vw; }
 body.presentation-mode .stage-footer p strong { font-size: clamp(16px, 1.5vw, 24px); }
 body.presentation-mode .presentation-help { display: block; position: fixed; right: 22px; bottom: 13px; z-index: 950; color: #77717b; font-size: 9px; letter-spacing: .08em; }
 body.presentation-mode .explain-button { display: none; }
+body.presentation-mode .presentation-help { display: none; }
+body.presentation-mode .presentation-toolbar {
+    position: fixed;
+    right: 24px;
+    bottom: 20px;
+    z-index: 980;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 999px;
+    background: rgba(18,18,19,.9);
+    box-shadow: 0 16px 42px rgba(0,0,0,.4);
+    backdrop-filter: blur(16px);
+}
+body.presentation-mode .presentation-toolbar button {
+    min-width: 40px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px;
+    color: #d7d1da;
+    background: #242127;
+    font-size: 11px;
+    font-weight: 850;
+    cursor: pointer;
+}
+body.presentation-mode .presentation-toolbar button[data-action="presentation-play"] {
+    min-width: 64px;
+    color: var(--ink);
+    border-color: var(--lime);
+    background: var(--lime);
+}
+body.presentation-mode .presentation-toolbar button[data-action="exit-presentation"] { border-color: rgba(255,107,100,.4); }
+body.presentation-mode .presentation-toolbar span {
+    min-width: 54px;
+    color: #a49da8;
+    font: 900 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-align: center;
+}
+body.presentation-mode .topology::after { display: none; }
 body.presentation-mode .stage-sequence { width: 48px; height: 48px; font-size: 9px; }
 body.presentation-mode .stage-heading-lockup { padding-left: 66px; }
 body.presentation-mode .stage-eyebrow { font-size: clamp(9px, .75vw, 13px); }
@@ -1589,10 +1633,15 @@ body.presentation-mode .legacy-cost-stack { top: 45vh; width: min(740px, 58%); }
 body.presentation-mode .legacy-cost-stack div { min-height: 82px; }
 body.presentation-mode .firewall-layer,
 body.presentation-mode .resilience-layer { inset: 3vh 4vw 2.5vh; }
-body.presentation-mode .locality-layer { inset: 3vh 4vw 3vh; }
-body.presentation-mode .microsegmentation-layer { inset: 3vh 4vw 17vh; }
+body.presentation-mode .locality-layer { inset: 110px 4vw 3vh; }
+body.presentation-mode .microsegmentation-layer { inset: 110px 4vw 17vh; }
 body.presentation-mode .locality-panel,
 body.presentation-mode .micro-panel { padding: clamp(18px, 1.4vw, 26px); }
+body.presentation-mode .locality-panel,
+body.presentation-mode .micro-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+body.presentation-mode .data-move-flow,
+body.presentation-mode .local-execution-flow,
+body.presentation-mode .shared-local-zone { width: 100%; align-self: center; }
 body.presentation-mode .locality-panel header strong,
 body.presentation-mode .micro-panel header strong { font-size: clamp(16px, 1.25vw, 22px); }
 body.presentation-mode .locality-panel header p,
@@ -1605,6 +1654,55 @@ body.presentation-mode .policy-console { bottom: 2.5vh; width: min(340px, 26vw);
 body.presentation-mode .sdk-layer { inset: 3vh 12vw 3vh; }
 body.presentation-mode .sdk-app-card,
 body.presentation-mode .sdk-network-card { width: min(860px, 82%); }
+body.presentation-mode .scene-badge { padding: 6px 9px; font-size: 10px; }
+body.presentation-mode .firewall-agent strong,
+body.presentation-mode .resilience-caller strong { font-size: 14px; }
+body.presentation-mode .firewall-agent small,
+body.presentation-mode .firewall-control-node small,
+body.presentation-mode .resilience-caller small { font-size: 10px; }
+body.presentation-mode .firewall-boundary span,
+body.presentation-mode .firewall-boundary b { font-size: 8px; }
+body.presentation-mode .firewall-posture span { font-size: 10px; }
+body.presentation-mode .firewall-posture strong { font-size: 12px; }
+body.presentation-mode .firewall-actions button,
+body.presentation-mode .resilience-actions button,
+body.presentation-mode .resilience-modes button { min-height: 40px; font-size: 11px; }
+body.presentation-mode .data-source-card strong,
+body.presentation-mode .remote-agent-card strong,
+body.presentation-mode .remote-request-card strong,
+body.presentation-mode .local-agent-card strong,
+body.presentation-mode .local-data-card strong { font-size: 12px; }
+body.presentation-mode .data-source-card small,
+body.presentation-mode .remote-agent-card small { font-size: 9px; }
+body.presentation-mode .raw-data-rail span,
+body.presentation-mode .result-rail span,
+body.presentation-mode .boundary-label { font-size: 8px; }
+body.presentation-mode .risk-chips span,
+body.presentation-mode .no-code-chip { font-size: 9px; }
+body.presentation-mode .local-agent { width: 112px; min-height: 66px; }
+body.presentation-mode .local-agent strong { font-size: 11px; }
+body.presentation-mode .local-agent small { font-size: 8px; }
+body.presentation-mode .authorization-gate { font-size: 9px; }
+body.presentation-mode .approved-local-path span,
+body.presentation-mode .denied-local-path span,
+body.presentation-mode .panel-note { font-size: 9px; }
+body.presentation-mode .resilience-toolbar strong { font-size: 15px; }
+body.presentation-mode .resilience-toolbar small { font-size: 10px; }
+body.presentation-mode .replica-role { font-size: 9px; }
+body.presentation-mode .replica strong { font-size: 12px; }
+body.presentation-mode .replica small { font-size: 9px; }
+body.presentation-mode .replica b { font-size: 9px; }
+body.presentation-mode .resilience-status { font-size: 11px; }
+body.presentation-mode .simulation-disclaimer { font-size: 8px; }
+body.presentation-mode .sdk-app-card > span,
+body.presentation-mode .sdk-network-heading > span { font-size: 10px; }
+body.presentation-mode .sdk-app-flow strong { font-size: 16px; }
+body.presentation-mode .sdk-app-flow small { font-size: 11px; }
+body.presentation-mode .sdk-app-flow code { font-size: 13px; }
+body.presentation-mode .sdk-bridge span { font-size: 12px; }
+body.presentation-mode .sdk-bridge small { font-size: 8px; }
+body.presentation-mode .sdk-network-heading strong { font-size: 13px; }
+body.presentation-mode .sdk-network-flow i { font-size: 10px; }
 
 @keyframes orbitSpin { to { transform: rotate(360deg); } }
 @keyframes dash { to { stroke-dashoffset: -48; } }

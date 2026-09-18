@@ -188,6 +188,8 @@
     const stageExplainer = document.getElementById("stage-explainer");
     const progressFill = document.getElementById("progress-fill");
     const progressLabel = document.getElementById("progress-label");
+    const presentationProgress = document.getElementById("presentation-progress");
+    const presentationPlayButton = document.querySelector('[data-action="presentation-play"]');
     const playButton = document.querySelector('[data-action="play"]');
     const playLabel = playButton.querySelector("span");
     const chapterButtons = [...document.querySelectorAll("[data-scene-target]")];
@@ -201,6 +203,7 @@
     const resilienceModeButtons = [...document.querySelectorAll("button[data-resilience-mode]")];
     const replicaCards = [...document.querySelectorAll("[data-replica]")];
     const resilienceStatusText = document.getElementById("resilience-status-text");
+    const storyPanel = document.querySelector(".story-panel");
 
     let currentScene = 0;
     let currentLens = "business";
@@ -331,6 +334,7 @@
 
         progressFill.style.width = `${((currentScene + 1) / scenes.length) * 100}%`;
         progressLabel.textContent = `${currentScene + 1} / ${scenes.length}`;
+        presentationProgress.textContent = `${String(currentScene + 1).padStart(2, "0")} / ${String(scenes.length).padStart(2, "0")}`;
 
         setPolicyState("allowed");
         setFirewallState("idle");
@@ -356,6 +360,8 @@
         playButton.classList.toggle("is-playing", isPlaying);
         playButton.setAttribute("aria-pressed", String(isPlaying));
         playLabel.textContent = isPlaying ? "Pause story" : "Play story";
+        presentationPlayButton.setAttribute("aria-pressed", String(isPlaying));
+        presentationPlayButton.textContent = isPlaying ? "Pause" : "Play";
         window.clearInterval(autoplayTimer);
         autoplayTimer = null;
         if (isPlaying) {
@@ -365,6 +371,9 @@
 
     function setPresentationMode(next) {
         body.classList.toggle("presentation-mode", next);
+        if (!next) setPlaying(false);
+        if (next) storyPanel.setAttribute("inert", "");
+        else storyPanel.removeAttribute("inert");
         presentationButtons.forEach(button => button.setAttribute("aria-pressed", String(next)));
         if (next) {
             document.getElementById("architecture-stage").focus({ preventScroll: true });
@@ -389,6 +398,8 @@
     }));
 
     playButton.addEventListener("click", () => setPlaying(!isPlaying));
+    presentationPlayButton.addEventListener("click", () => setPlaying(!isPlaying));
+    document.querySelector('[data-action="exit-presentation"]').addEventListener("click", () => setPresentationMode(false));
     presentationButtons.forEach(button => button.addEventListener("click", () => setPresentationMode(!body.classList.contains("presentation-mode"))));
 
     document.querySelector('[data-action="explain"]').addEventListener("click", event => {
@@ -418,6 +429,7 @@
                 renderResilience();
             }
         };
+        if (handlers[actionButton.dataset.action]) setPlaying(false);
         handlers[actionButton.dataset.action]?.();
     });
     body.dataset.controlsReady = "true";
@@ -431,6 +443,8 @@
     }));
 
     document.addEventListener("keydown", event => {
+        const interactiveTarget = event.target.closest?.("button, a, input, select, textarea, summary, [contenteditable='true']");
+        if (interactiveTarget && ["ArrowRight", "ArrowLeft", " "].includes(event.key)) return;
         if (event.key === "ArrowRight") {
             event.preventDefault();
             setPlaying(false);
