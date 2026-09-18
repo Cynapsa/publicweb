@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cynapsa Public Web Demos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(34, 211, 238, 0.18), transparent 34rem),
+                radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.12), transparent 30rem),
+                #050811;
+        }
+
+        .mesh-line {
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+            background-size: 34px 34px;
+            mask-image: linear-gradient(to bottom, black, transparent);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-200 font-sans">
+    <div class="mesh-line fixed inset-0 pointer-events-none"></div>
+
+    <main class="relative mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10 lg:py-12">
+        <header class="mb-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+            <div>
+                <p class="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-cyan-300">Cynapsa public web</p>
+                <h1 class="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                    Interactive demos for agentic networking.
+                </h1>
+                <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+                    This repo contains standalone HTML demos that explain why enterprise agentic AI needs secure, identity-aware networking. Each page compares legacy network patterns against Cynapsa concepts such as portless mesh connectivity, local agents, identity-based routing, and microsegmentation.
+                </p>
+            </div>
+
+            <section class="rounded-lg border border-slate-700 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/20 backdrop-blur">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">How to use this index</h2>
+                <p class="mt-3 text-sm leading-6 text-slate-300">
+                    Open a demo, use its sidebar controls, and compare the failure mode with the Cynapsa approach. The pages are static, so they can run directly in a browser without a build step.
+                </p>
+                <div class="mt-5 grid grid-cols-3 gap-3 text-center text-xs text-slate-400">
+                    <div class="rounded border border-slate-700 bg-slate-950/70 p-3">
+                        <div class="text-lg font-bold text-cyan-300">13</div>
+                        demos
+                    </div>
+                    <div class="rounded border border-slate-700 bg-slate-950/70 p-3">
+                        <div class="text-lg font-bold text-cyan-300">0</div>
+                        build steps
+                    </div>
+                    <div class="rounded border border-slate-700 bg-slate-950/70 p-3">
+                        <div class="text-lg font-bold text-cyan-300">HTML</div>
+                        only
+                    </div>
+                </div>
+            </section>
+        </header>
+
+        <section aria-labelledby="demo-list-title">
+            <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-300">Demo map</p>
+                    <h2 id="demo-list-title" class="mt-2 text-2xl font-semibold text-white">Choose a walkthrough</h2>
+                </div>
+                <p class="max-w-xl text-sm text-slate-400">
+                    The suggested order starts with the broad agentic networking story, then moves into specific security, privacy, routing, and blast-radius scenarios.
+                </p>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <a href="./POC_to_Cynapsa.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Start here</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">The Evolution of Agentic Networking</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">01</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Shows the shift from a simple single-environment proof of concept to production reality, where load balancers, API gateways, VPNs, and firewalls create bottlenecks. The final stage introduces the Cynapsa mesh as an identity-native alternative with native agent load balancing.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open POC_to_Cynapsa.html</span>
+                </a>
+
+                <a href="./cynapsa_sales_movie.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Sales movie</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">From Agent Demo to Production Mesh</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">02</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        An auto-playing movie-style explainer showing a multi-agent app moving from one clean environment into production locations, exposing legacy networking gaps, and revealing Cynapsa&#x27;s zero-trust identity mesh with no application code changes.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open cynapsa_sales_movie.html</span>
+                </a>
+
+                <a href="./cynapsa_sales_animation.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Sales explainer</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">The Network Layer for Agentic AI</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">03</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        A buyer-friendly animated story showing why agentic AI breaks outside the lab, how legacy networking creates risk and delay, and how Cynapsa enables secure identity-based connectivity across real enterprise environments.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open cynapsa_sales_animation.html</span>
+                </a>
+
+                <a href="./cynapsa_technical_walkthrough.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Technical walkthrough</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Cynapsa Architecture for Engineers</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">04</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        A deeper animated walkthrough for engineering and security teams covering identity, control-plane authorization, encrypted P2P data paths, segmentation, Layer 7 security integration, telemetry, and incident containment.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open cynapsa_technical_walkthrough.html</span>
+                </a>
+
+                <a href="./4_issues.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Framework barriers</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">The 4 Barriers to Agentic AI</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">05</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Walks through security, privacy, accessibility, and scalability problems that appear when lab-built agent frameworks move into enterprise production. Each stage lets the viewer compare legacy infrastructure behavior with a Cynapsa mesh approach.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open 4_issues.html</span>
+                </a>
+
+                <a href="./healthcare_agents.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Healthcare use case</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Healthcare AI and HIPAA Compliance</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">06</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Demonstrates a hospital sepsis-detection workflow. The legacy path sends protected health information toward the cloud, while the Cynapsa path keeps the health agent and raw EHR data inside the hospital network.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open healthcare_agents.html</span>
+                </a>
+
+                <a href="./legal_doc_agent.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Legal use case</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Legal Data Confidentiality</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">07</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Explains how a law firm can use an AI document agent without uploading confidential client files to the cloud. The Cynapsa version places the document agent next to the private VectorDB and returns only the final answer.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open legal_doc_agent.html</span>
+                </a>
+
+                <a href="./identity_based_routing.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Routing concept</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Identity-Based Routing</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">08</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Compares IP-based networking with Cynapsa routing by cryptographic identity. It highlights mobile agent roaming, IP changes, out-of-band authorization through the control plane, and zero-trust connectivity that survives network changes.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open identity_based_routing.html</span>
+                </a>
+
+                <a href="./distributed_agentic_segmentation.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Distributed segmentation</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Proximity Does Not Equal Trust</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">09</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Shows agentic microsegmentation across AWS, GCP, on-premise, and local networks. The legacy hub-and-spoke VPN connects locations with any-to-any access, while Cynapsa uses identity-based P2P routing and mesh contexts to contain breaches and block shadow agents.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open distributed_agentic_segmentation.html</span>
+                </a>
+
+                <a href="./microsegmentation.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Security simulation</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Kubernetes Blast Radius Simulation</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">10</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        Simulates a compromised AI agent inside a shared Kubernetes namespace. The current network topology allows lateral movement, while Cynapsa agentic microsegmentation contains the compromise through identity-based cryptographic isolation.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open microsegmentation.html</span>
+                </a>
+
+                <a href="./agenitc_sdk.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Layer 7 vs. Layer 3/4</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Agentic SDKs Assume Connectivity</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">11</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        See how agent frameworks like LangGraph, CrewAI, and Google A2A work cleanly at Layer 7, yet fail on legacy networks that force API gateways and open firewall ports, and how Cynapsa provides the zero-trust tunnel instead.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open agenitc_sdk.html</span>
+                </a>
+
+                <a href="./llm_and_ai_security.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Defense in depth</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Securing the Pipes vs. the Water</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">12</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        This demo contrasts a legacy AI networking setup that opens a firewall port and leaves the server exposed, with Cynapsa’s zero-trust Layer 3/4 mesh that keeps firewalls closed while Layer 7 tools inspect the AI payload safely.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open llm_and_ai_security.html</span>
+                </a>
+
+                <a href="./observibility.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                    <div class="mb-4 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Agentic Observability</p>
+                            <h3 class="mt-2 text-xl font-semibold text-white">Visibility and Control</h3>
+                        </div>
+                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">13</span>
+                    </div>
+                    <p class="text-sm leading-6 text-slate-300">
+                        See how Cynapsa addresses the legacy failure of code-injected logging by providing visibility across owned, third-party, and unmanaged agents with zero code changes and mesh-delivered telemetry.
+                    </p>
+                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open observibility.html</span>
+                </a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

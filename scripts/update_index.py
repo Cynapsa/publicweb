@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
-INDEX_PATH = ROOT / "index.html"
+CATALOG_PATH = ROOT / "demo-catalog.html"
 METADATA_PATH = ROOT / "scripts" / "demo_metadata.json"
 
 DEMO_ORDER = [
@@ -303,7 +303,7 @@ def write_metadata(metadata):
 def get_demos():
     html_files = [
         path for path in ROOT.glob("*.html")
-        if path.name != "index.html"
+        if path.name not in {"index.html", CATALOG_PATH.name}
     ]
     known_names = [name for name in DEMO_ORDER if (ROOT / name).exists()]
     new_names = sorted(path.name for path in html_files if path.name not in DEMO_ORDER)
@@ -450,7 +450,7 @@ def render_index(demos):
 
 
 def main():
-    INDEX_PATH.write_text(render_index(get_demos()), encoding="utf-8")
+    CATALOG_PATH.write_text(render_index(get_demos()), encoding="utf-8")
 
 
 if __name__ == "__main__":
