@@ -36,6 +36,7 @@
         .check-item.active { opacity: 1; color: #4ade80; }
         .check-item.active::before { content: '✓ '; }
     </style>
+    <link rel="stylesheet" href="./styles/demo-polish.css?v=1">
 </head>
 <body class="bg-slate-900 text-slate-200 font-sans h-screen w-screen overflow-hidden flex">
 
@@ -90,6 +91,7 @@
         </div>
     </div>
 
+    <script src="./presentation_stepper.js?v=20260506-left"></script>
     <script>
         const canvasStage = document.getElementById('canvas-stage');
         const networkLines = document.getElementById('network-lines');
@@ -401,5 +403,6 @@
             if(!isSimulating) setMode(currentMode);
         });
     </script>
+    <script src="./scripts/demo-polish.js?v=1"></script>
 </body>
 </html>

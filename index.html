@@ -1,221 +1,597 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cynapsa Public Web Demos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            color-scheme: dark;
-        }
-
-        body {
-            background:
-                radial-gradient(circle at top left, rgba(34, 211, 238, 0.18), transparent 34rem),
-                radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.12), transparent 30rem),
-                #050811;
-        }
-
-        .mesh-line {
-            background-image:
-                linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-            background-size: 34px 34px;
-            mask-image: linear-gradient(to bottom, black, transparent);
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="An interactive explanation of how Cynapsa connects distributed AI agents with identity-based policy and a direct peer data path.">
+    <meta name="theme-color" content="#101010">
+    <title>Cynapsa Interactive Experience</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Ccircle cx='20' cy='32' r='6' fill='%23cfff00'/%3E%3Ccircle cx='44' cy='20' r='6' fill='%23ab77ff'/%3E%3Ccircle cx='44' cy='44' r='6' fill='%23fff'/%3E%3Cpath d='M25 29l13-7M25 35l13 7' stroke='%23cfff00' stroke-width='3'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./styles/experience.css?v=technical-stories-2">
 </head>
-<body class="min-h-screen text-slate-200 font-sans">
-    <div class="mesh-line fixed inset-0 pointer-events-none"></div>
+<body data-scene="0" data-scene-id="old-network" data-lens="business" data-policy-state="allowed" data-firewall-state="idle" data-resilience-mode="balanced" data-resilience-state="healthy">
+    <a class="skip-link" href="#experience">Skip to the experience</a>
 
-    <main class="relative mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-10 lg:py-12">
-        <header class="mb-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-            <div>
-                <p class="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-cyan-300">Cynapsa public web</p>
-                <h1 class="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                    Interactive demos for agentic networking.
-                </h1>
-                <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-                    This repo contains standalone HTML demos that explain why enterprise agentic AI needs secure, identity-aware networking. Each page compares legacy network patterns against Cynapsa concepts such as portless mesh connectivity, local agents, identity-based routing, and microsegmentation.
-                </p>
+    <header class="site-header">
+        <a class="brand" href="./" aria-label="Cynapsa home">
+            <img src="./assets/cynapsa-logo-dark.png" alt="Cynapsa">
+        </a>
+        <nav class="header-actions" aria-label="Experience controls">
+            <div class="lens-switch" role="group" aria-label="Choose information level">
+                <button class="lens-button is-active" type="button" data-lens="business" aria-pressed="true">Business</button>
+                <button class="lens-button" type="button" data-lens="architecture" aria-pressed="false">Architecture</button>
             </div>
+            <button class="presentation-button" type="button" data-action="presentation" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H4zM9 20l3-4 3 4"/></svg>
+                <span>Presentation mode</span>
+            </button>
+        </nav>
+    </header>
 
-            <section class="rounded-lg border border-slate-700 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/20 backdrop-blur">
-                <h2 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">How to use this index</h2>
-                <p class="mt-3 text-sm leading-6 text-slate-300">
-                    Open a demo, use its sidebar controls, and compare the failure mode with the Cynapsa approach. The pages are static, so they can run directly in a browser without a build step.
-                </p>
-                <div class="mt-5 grid grid-cols-3 gap-3 text-center text-xs text-slate-400">
-                    <div class="rounded border border-slate-700 bg-slate-950/70 p-3">
-                        <div class="text-lg font-bold text-cyan-300">10</div>
-                        demos
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">The Cynapsa interactive experience</p>
+                <h1 id="hero-title">The Network Every<br><span>AI Agent Needs</span></h1>
+                <p class="hero-lede">Connect agents across environments. Keep data where it belongs. Control access by identity, with no code change necessary.</p>
+                <div class="hero-actions">
+                    <a class="primary-action" href="#experience">Explore the story <span aria-hidden="true">↓</span></a>
+                    <button class="text-action" type="button" data-action="presentation">Open presentation view</button>
+                </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="hero-orbit hero-orbit-one"></div>
+                <div class="hero-orbit hero-orbit-two"></div>
+                <div class="hero-control-label">IDENTITY + POLICY</div>
+                <div class="hero-agent hero-agent-a"><span>A1</span><small>Planner</small></div>
+                <div class="hero-agent hero-agent-b"><span>B4</span><small>Worker</small></div>
+                <div class="hero-agent hero-agent-c"><span>C7</span><small>Data</small></div>
+                <div class="hero-flow hero-flow-one"></div>
+                <div class="hero-flow hero-flow-two"></div>
+            </div>
+            <p class="simulation-label">Interactive architecture simulation</p>
+        </section>
+
+        <section class="experience" id="experience" aria-labelledby="experience-title">
+            <aside class="story-panel">
+                <div class="story-intro">
+                    <p class="eyebrow">An eight-part walkthrough</p>
+                    <h2 id="experience-title">How Cynapsa changes the network beneath your agents</h2>
+                </div>
+
+                <ol class="chapter-list" aria-label="Story chapters">
+                    <li><button type="button" class="chapter-button is-active" data-scene-target="0"><span>01</span><strong>The old network tax</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="1"><span>02</span><strong>Agent identity</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="2"><span>03</span><strong>Direct connectivity</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="3"><span>04</span><strong>Closed firewalls</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="4"><span>05</span><strong>Data locality</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="5"><span>06</span><strong>Microsegmentation</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="6"><span>07</span><strong>Built-in resilience</strong></button></li>
+                    <li><button type="button" class="chapter-button" data-scene-target="7"><span>08</span><strong>No code change</strong></button></li>
+                </ol>
+
+                <article class="scene-copy" aria-live="polite">
+                    <p class="scene-kicker" id="scene-kicker">01 · The challenge</p>
+                    <h3 id="scene-title">Your agents have outgrown the sandbox</h3>
+                    <p id="scene-body">A proof of concept works because every agent lives inside one trusted environment. Production splits the workflow across clouds, private networks, customer sites, and edge locations.</p>
+                    <ul id="scene-points"></ul>
+                    <details class="architecture-detail" id="architecture-detail">
+                        <summary>Architecture detail</summary>
+                        <p id="scene-architecture"></p>
+                    </details>
+                </article>
+
+                <div class="story-controls">
+                    <button type="button" class="control-button" data-action="previous" aria-label="Previous chapter">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+                    </button>
+                    <button type="button" class="play-button" data-action="play" aria-pressed="false">
+                        <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+                        <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+                        <span>Play story</span>
+                    </button>
+                    <button type="button" class="control-button" data-action="next" aria-label="Next chapter">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div>
+                    <span class="progress-label" id="progress-label">1 / 8</span>
+                </div>
+            </aside>
+
+            <div class="architecture-stage" id="architecture-stage" tabindex="0" aria-label="Animated Cynapsa architecture diagram">
+                <div class="stage-header">
+                    <div class="stage-heading-lockup">
+                        <span class="stage-sequence" id="stage-sequence">01 / 08</span>
+                        <p class="stage-eyebrow" id="stage-eyebrow">Production reality</p>
+                        <h2 id="stage-title">Agents cross network boundaries</h2>
                     </div>
-                    <div class="rounded border border-slate-700 bg-slate-950/70 p-3">
-                        <div class="text-lg font-bold text-cyan-300">0</div>
-                        build steps
-                    </div>
-                    <div class="rounded border border-slate-700 bg-slate-950/70 p-3">
-                        <div class="text-lg font-bold text-cyan-300">HTML</div>
-                        only
+                    <div class="stage-legend" aria-label="Diagram legend">
+                        <span><i class="legend-control"></i>Coordination</span>
+                        <span><i class="legend-data"></i>Application traffic</span>
+                        <span><i class="legend-blocked"></i>Blocked</span>
                     </div>
                 </div>
-            </section>
-        </header>
 
-        <section aria-labelledby="demo-list-title">
-            <div class="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.24em] text-cyan-300">Demo map</p>
-                    <h2 id="demo-list-title" class="mt-2 text-2xl font-semibold text-white">Choose a walkthrough</h2>
+                <div class="topology">
+                    <div class="grid-glow"></div>
+
+                    <div class="control-plane">
+                        <div class="control-plane-mark">CP</div>
+                        <div>
+                            <strong>Cynapsa control plane</strong>
+                            <span>Identity · policy · discovery · authorization</span>
+                        </div>
+                        <small>Outside the application data path</small>
+                    </div>
+
+                    <div class="environment environment-aws" data-zone="aws">
+                        <span class="zone-label">AWS VPC</span>
+                        <div class="agent agent-planner" data-agent="planner">
+                            <span class="agent-icon">AI</span>
+                            <div><strong>Planner</strong><small>id: 0xA1</small></div>
+                            <i class="identity-badge">VERIFIED</i>
+                        </div>
+                    </div>
+                    <div class="environment environment-gcp" data-zone="gcp">
+                        <span class="zone-label">GCP VPC</span>
+                        <div class="agent agent-worker" data-agent="worker">
+                            <span class="agent-icon">AI</span>
+                            <div><strong>Worker</strong><small>id: 0xB4</small></div>
+                            <i class="identity-badge">VERIFIED</i>
+                            <i class="revoked-badge">REVOKED</i>
+                        </div>
+                    </div>
+                    <div class="environment environment-onprem" data-zone="onprem">
+                        <span class="zone-label">ON PREMISES</span>
+                        <div class="agent agent-data" data-agent="data">
+                            <span class="agent-icon">AI</span>
+                            <div><strong>Data agent</strong><small>id: 0xC7</small></div>
+                            <i class="identity-badge">VERIFIED</i>
+                        </div>
+                        <div class="private-data"><span></span><strong>Private data</strong><small>Raw data stays here</small></div>
+                    </div>
+                    <div class="environment environment-edge" data-zone="edge">
+                        <span class="zone-label">EDGE / CUSTOMER</span>
+                        <div class="agent agent-mobile" data-agent="mobile">
+                            <span class="agent-icon">AI</span>
+                            <div><strong>Action agent</strong><small>id: 0xE9</small></div>
+                            <i class="identity-badge">VERIFIED</i>
+                        </div>
+                    </div>
+
+                    <svg class="topology-lines" viewBox="0 0 1000 620" preserveAspectRatio="none">
+                        <defs>
+                            <filter id="limeGlow"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                            <filter id="purpleGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        </defs>
+                        <g class="legacy-connections">
+                            <path class="legacy-line legacy-one" d="M230 230 C370 245 420 300 500 325"/>
+                            <path class="legacy-line legacy-two" d="M770 230 C630 245 580 300 500 325"/>
+                            <path class="legacy-line legacy-three" d="M230 510 C365 475 430 390 500 325"/>
+                            <path class="legacy-line legacy-four" d="M770 510 C635 475 570 390 500 325"/>
+                            <g class="legacy-hub">
+                                <circle cx="500" cy="325" r="62"/>
+                                <text x="500" y="300">VPN / SD-WAN</text>
+                                <text x="500" y="320">SUBNETS + ROUTES</text>
+                                <text x="500" y="340">FIREWALL RULES</text>
+                                <text x="500" y="360">LOAD BALANCERS</text>
+                            </g>
+                            <g class="blocked-marker blocked-one" transform="translate(350 263)"><circle r="15"/><path d="M-7-7L7 7M7-7L-7 7"/></g>
+                            <g class="blocked-marker blocked-two" transform="translate(650 263)"><circle r="15"/><path d="M-7-7L7 7M7-7L-7 7"/></g>
+                        </g>
+                        <g class="control-connections" filter="url(#purpleGlow)">
+                            <path class="control-line control-one" d="M500 80 C410 105 320 128 230 200"/>
+                            <path class="control-line control-two" d="M500 80 C590 105 680 128 770 200"/>
+                            <path class="control-line control-three" d="M500 80 C390 210 310 330 230 480"/>
+                            <path class="control-line control-four" d="M500 80 C610 210 690 330 770 480"/>
+                        </g>
+                        <g class="data-connections" filter="url(#limeGlow)">
+                            <path class="data-line data-one" d="M270 230 C405 185 600 185 730 230"/>
+                            <path class="data-line data-two" d="M730 250 C610 350 410 405 270 490"/>
+                            <path class="data-line data-three" d="M270 510 C415 565 585 565 730 510"/>
+                        </g>
+                        <g class="blocked-attempt">
+                            <path d="M730 490 C590 430 430 350 270 250"/>
+                            <g class="blocked-marker" transform="translate(500 370)"><circle r="18"/><path d="M-8-8L8 8M8-8L-8 8"/></g>
+                        </g>
+                    </svg>
+
+                    <div class="legacy-cost-stack" aria-hidden="true">
+                        <span>Every new environment adds work</span>
+                        <div><i>01</i><strong>Address space</strong><small>Plan non-overlapping subnets</small></div>
+                        <div><i>02</i><strong>Tunnels + routes</strong><small>Coordinate VPN / SD-WAN paths</small></div>
+                        <div><i>03</i><strong>Security changes</strong><small>Approve firewall and endpoint exposure</small></div>
+                        <div><i>04</i><strong>Operations</strong><small>Monitor, repair, and scale the network</small></div>
+                    </div>
+
+                    <div class="firewall-layer scene-layer">
+                        <div class="firewall-diagram">
+                            <article class="firewall-zone firewall-zone-cloud">
+                                <span class="zone-label">CLOUD VPC</span>
+                                <div class="firewall-agent"><i>A1</i><strong>Planner</strong><small>verified identity</small></div>
+                                <div class="firewall-boundary"><span>FIREWALL</span><b>INBOUND CLOSED</b></div>
+                            </article>
+                            <div class="firewall-middle">
+                                <div class="unsolicited-probe"><span>UNSOLICITED</span><b>×</b></div>
+                                <div class="firewall-control-node"><i>CP</i><strong>Identity + policy</strong><small>Connection coordination</small></div>
+                                <div class="outbound-signal outbound-left"><span>OUTBOUND</span></div>
+                                <div class="outbound-signal outbound-right"><span>OUTBOUND</span></div>
+                                <div class="authorized-tunnel"><span>AUTHORIZED BIDIRECTIONAL PATH</span></div>
+                            </div>
+                            <article class="firewall-zone firewall-zone-private">
+                                <span class="zone-label">PRIVATE / CUSTOMER NETWORK</span>
+                                <div class="firewall-agent"><i>B4</i><strong>Worker</strong><small>verified identity</small></div>
+                                <div class="firewall-boundary"><span>FIREWALL</span><b>INBOUND CLOSED</b></div>
+                            </article>
+                        </div>
+                        <div class="firewall-posture">
+                            <div><span>Inbound port opening</span><strong>Not required</strong></div>
+                            <div><span>Agent coordination</span><strong>Outbound initiated</strong></div>
+                            <div><span>Relationship</span><strong id="firewall-relationship">Not established</strong></div>
+                        </div>
+                        <div class="firewall-actions" role="group" aria-label="Firewall simulation">
+                            <button type="button" data-action="attempt-inbound">Attempt unsolicited access</button>
+                            <button type="button" data-action="authorize-path">Establish authorized connection</button>
+                            <button type="button" data-action="reset-firewall">Replay</button>
+                        </div>
+                    </div>
+
+                    <div class="locality-layer scene-layer">
+                        <article class="locality-panel locality-risk-panel">
+                            <header>
+                                <span class="scene-badge scene-badge-risk">COMMON WORKAROUND</span>
+                                <strong>Move data to the agent</strong>
+                                <p>Raw records leave their governed boundary and create another sensitive copy.</p>
+                            </header>
+                            <div class="data-move-flow">
+                                <div class="data-source-card">
+                                    <span class="data-lock"></span>
+                                    <div><strong>Private records</strong><small>Governed environment</small></div>
+                                </div>
+                                <div class="raw-data-rail"><span>RAW DATA COPY</span></div>
+                                <div class="remote-agent-card">
+                                    <i>AI</i>
+                                    <div><strong>Remote agent</strong><small>New data location</small></div>
+                                </div>
+                            </div>
+                            <div class="risk-chips">
+                                <span>Security exposure</span>
+                                <span>Privacy scope</span>
+                                <span>Residency and retention</span>
+                            </div>
+                        </article>
+
+                        <article class="locality-panel locality-solution-panel">
+                            <header>
+                                <span class="scene-badge scene-badge-cynapsa">CYNAPSA</span>
+                                <strong>Move the agent to the data</strong>
+                                <p>The agent runs beside the source. Raw records remain under existing controls.</p>
+                            </header>
+                            <div class="local-execution-flow">
+                                <div class="remote-request-card"><i>A1</i><strong>Requester</strong></div>
+                                <div class="result-rail"><span>TASK + PERMITTED RESULT</span></div>
+                                <div class="governed-boundary">
+                                    <span class="boundary-label">GOVERNED DATA ENVIRONMENT</span>
+                                    <div class="local-agent-card"><i>AI</i><strong>Same agent logic</strong></div>
+                                    <div class="local-data-card"><span class="data-lock"></span><strong>Raw data stays here</strong></div>
+                                </div>
+                            </div>
+                            <div class="no-code-chip">NO AGENT CODE CHANGE</div>
+                        </article>
+                    </div>
+
+                    <div class="microsegmentation-layer scene-layer">
+                        <article class="micro-panel micro-before">
+                            <header>
+                                <span class="scene-badge scene-badge-risk">LOCATION-BASED TRUST</span>
+                                <strong>Same VPC or machine</strong>
+                                <p>Local reachability can become lateral access between neighboring agents.</p>
+                            </header>
+                            <div class="shared-local-zone">
+                                <span class="zone-label">SHARED LOCAL NETWORK</span>
+                                <svg class="local-access-lines" viewBox="0 0 500 180" preserveAspectRatio="none">
+                                    <path d="M100 105 L250 55 L400 105 L100 105 M250 55 L250 145 M100 105 L250 145 L400 105"/>
+                                </svg>
+                                <div class="local-agent local-agent-one"><i>B4</i><strong>Worker</strong></div>
+                                <div class="local-agent local-agent-two"><i>C7</i><strong>Data</strong></div>
+                                <div class="local-agent local-agent-three"><i>S9</i><strong>Secrets</strong></div>
+                            </div>
+                            <p class="panel-note panel-note-risk">Reachable by location, without a per-agent authorization decision.</p>
+                        </article>
+
+                        <article class="micro-panel micro-after">
+                            <header>
+                                <span class="scene-badge scene-badge-cynapsa">IDENTITY MICROSEGMENTATION</span>
+                                <strong>Every local relationship is authorized</strong>
+                                <p>Sharing a host, subnet, or VPC grants no automatic agent access.</p>
+                            </header>
+                            <div class="shared-local-zone protected-local-zone">
+                                <span class="zone-label">SAME SHARED LOCAL NETWORK</span>
+                                <div class="authorization-gate">CONTROL PLANE: IDENTITY + AUTHORIZATION</div>
+                                <div class="approved-local-path"><span>ALLOWED</span></div>
+                                <div class="denied-local-path"><span>BLOCKED</span></div>
+                                <div class="local-agent local-agent-one"><i>B4</i><strong>Worker</strong><small>verified</small></div>
+                                <div class="local-agent local-agent-two"><i>C7</i><strong>Data</strong><small>verified</small></div>
+                                <div class="local-agent local-agent-three"><i>S9</i><strong>Secrets</strong><small>verified</small></div>
+                            </div>
+                            <p class="panel-note">Only the B4 to C7 identity relationship is approved.</p>
+                        </article>
+                    </div>
+
+                    <div class="resilience-layer scene-layer">
+                        <div class="resilience-toolbar">
+                            <div>
+                                <span class="scene-badge scene-badge-cynapsa">LOGICAL DESTINATION</span>
+                                <strong>identity: document-agent</strong>
+                                <small>One stable identity, distinct authorized instances</small>
+                            </div>
+                            <div class="resilience-modes" role="group" aria-label="Replica policy mode">
+                                <button type="button" class="is-active" data-resilience-mode="balanced" aria-pressed="true">Balanced</button>
+                                <button type="button" data-resilience-mode="active-passive" aria-pressed="false">Active-passive</button>
+                            </div>
+                        </div>
+                        <div class="resilience-visual">
+                            <div class="resilience-caller"><i>A1</i><strong>Caller</strong><small>same destination identity</small></div>
+                            <div class="request-stream" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                            <div class="instance-pool">
+                                <article class="replica replica-a" data-replica="a"><span class="replica-role">ACTIVE</span><i>A</i><strong>Instance A</strong><small>AWS · healthy</small><b>0</b></article>
+                                <article class="replica replica-b" data-replica="b"><span class="replica-role">ACTIVE</span><i>B</i><strong>Instance B</strong><small>Private cloud · healthy</small><b>0</b></article>
+                                <article class="replica replica-c" data-replica="c"><span class="replica-role">ACTIVE</span><i>C</i><strong>Instance C</strong><small>Edge · healthy</small><b>0</b></article>
+                            </div>
+                        </div>
+                        <div class="resilience-status"><span class="status-dot"></span><strong id="resilience-status-text">Three healthy instances are eligible for new requests.</strong></div>
+                        <div class="resilience-actions" role="group" aria-label="Resilience simulation">
+                            <button type="button" data-action="send-requests">Send requests</button>
+                            <button type="button" data-action="fail-instance">Take active instance offline</button>
+                            <button type="button" data-action="restore-instances">Restore all</button>
+                        </div>
+                        <p class="simulation-disclaimer">Illustrative routing simulation, not a performance benchmark. Failover applies to subsequent requests after failure detection.</p>
+                    </div>
+
+                    <div class="scene-callout callout-challenge"><strong>Connectivity assumed</strong><span>Firewalls, NAT, and private networks break the workflow.</span></div>
+                    <div class="scene-callout callout-identity"><strong>Identity replaces location</strong><span>Each agent receives a governed cryptographic identity.</span></div>
+                    <div class="scene-callout callout-direct"><strong>Preferred peer data path</strong><span>Authorized agents exchange application traffic directly.</span></div>
+                    <div class="scene-callout callout-firewall"><strong>Inbound stays closed</strong><span>Agents initiate the required outbound connectivity. Unsolicited inbound access remains blocked.</span></div>
+                    <div class="scene-callout callout-local"><strong>Bring the agent to the data</strong><span>Only the permitted result leaves the private environment.</span></div>
+                    <div class="scene-callout callout-policy"><strong>Policy enforced</strong><span>The revoked agent loses access. Other workflows continue.</span></div>
+                    <div class="scene-callout callout-resilience"><strong>Identity survives instance failure</strong><span>New requests move to a healthy authorized instance after failure detection.</span></div>
+                    <div class="scene-callout callout-sdk"><strong>No code change necessary</strong><span>Cynapsa adds the connectivity layer beneath the existing agent logic.</span></div>
+
+                    <div class="policy-console">
+                        <div><span class="status-dot"></span><strong>Policy simulation</strong></div>
+                        <p id="policy-status-text">Worker B4 may access Data C7</p>
+                        <div class="policy-actions">
+                            <button type="button" data-action="allow-policy" class="is-active" aria-pressed="true">Allow</button>
+                            <button type="button" data-action="revoke-policy" aria-pressed="false">Revoke</button>
+                        </div>
+                    </div>
+
+                    <div class="sdk-layer">
+                        <div class="sdk-app-card">
+                            <span>YOUR EXISTING AGENT APPLICATION</span>
+                            <div class="sdk-app-flow">
+                                <i class="sdk-app-node">AI</i>
+                                <div>
+                                    <strong>Framework and business logic</strong>
+                                    <small>LangGraph · CrewAI · custom runtime</small>
+                                </div>
+                                <code>agent.run(task)</code>
+                            </div>
+                        </div>
+                        <div class="sdk-bridge"><span>NO CODE CHANGE</span><small>Connectivity changes below the application</small></div>
+                        <div class="sdk-network-card">
+                            <div class="sdk-network-heading">
+                                <span>CYNAPSA NETWORKING LAYER</span>
+                                <strong>Identity · policy · discovery · private connectivity</strong>
+                            </div>
+                            <div class="sdk-network-flow" aria-hidden="true">
+                                <i>AWS</i><b></b><i>VPC</i><b></b><i>EDGE</i><b></b><i>DATA</i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <p class="max-w-xl text-sm text-slate-400">
-                    The suggested order starts with the broad agentic networking story, then moves into specific security, privacy, routing, and blast-radius scenarios.
-                </p>
+
+                <div class="stage-footer">
+                    <p><span>Takeaway</span><strong id="stage-takeaway">A working prototype is only the beginning. Production agents need cross-environment connectivity.</strong></p>
+                    <button type="button" class="explain-button" data-action="explain" aria-expanded="false">What am I seeing?</button>
+                </div>
+                <div class="stage-explainer" id="stage-explainer" hidden>
+                    <p id="stage-explainer-text"></p>
+                </div>
+                <nav class="presentation-toolbar" aria-label="Presentation controls">
+                    <button type="button" data-action="previous" aria-label="Previous chapter">←</button>
+                    <span id="presentation-progress">01 / 08</span>
+                    <button type="button" data-action="presentation-play" aria-pressed="false">Play</button>
+                    <button type="button" data-action="next" aria-label="Next chapter">→</button>
+                    <button type="button" data-action="exit-presentation">Exit</button>
+                </nav>
             </div>
+        </section>
 
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                <a href="./POC_to_Cynapsa.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Start here</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">The Evolution of Agentic Networking</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">01</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Shows the shift from a simple single-environment proof of concept to production reality, where load balancers, API gateways, VPNs, and firewalls create bottlenecks. The final stage introduces the Cynapsa mesh as an identity-native alternative with native agent load balancing.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open POC_to_Cynapsa.html</span>
-                </a>
+        <section class="architecture-distinction section-shell" aria-labelledby="distinction-title">
+            <div class="section-heading">
+                <p class="eyebrow">The architectural distinction</p>
+                <h2 id="distinction-title">Coordinate centrally.<br>Communicate directly.</h2>
+                <p>Cynapsa separates the decisions about identity and access from the preferred path that carries application traffic.</p>
+            </div>
+            <div class="distinction-visual">
+                <div class="distinction-control">
+                    <span>CONTROL PLANE</span>
+                    <strong>Who may connect?</strong>
+                    <p>Identity, membership, discovery, policy, and authorization.</p>
+                </div>
+                <div class="distinction-agents">
+                    <div class="mini-agent"><i>A1</i><strong>Planner</strong></div>
+                    <div class="direct-path"><span>APPLICATION TRAFFIC</span></div>
+                    <div class="mini-agent"><i>C7</i><strong>Data agent</strong></div>
+                </div>
+                <p class="distinction-note">The control plane authorizes the relationship. It stays outside the preferred peer application data path.</p>
+            </div>
+        </section>
 
-                <a href="./4_issues.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Framework barriers</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">The 4 Barriers to Agentic AI</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">02</span>
+        <section class="alternatives section-shell" aria-labelledby="alternatives-title">
+            <div class="section-heading compact">
+                <p class="eyebrow">Why a network layer</p>
+                <h2 id="alternatives-title">Messaging moves a payload.<br>Cynapsa establishes the relationship.</h2>
+                <p>Existing tools remain useful. Cynapsa provides the private identity, connectivity, and policy foundation beneath them.</p>
+            </div>
+            <div class="alternative-explorer">
+                <div class="alternative-tabs" role="tablist" aria-label="Compare connectivity alternatives">
+                    <button role="tab" aria-selected="true" data-alternative="collaboration">Slack + email</button>
+                    <button role="tab" aria-selected="false" data-alternative="queues">Queues + brokers</button>
+                    <button role="tab" aria-selected="false" data-alternative="https">HTTPS + mTLS</button>
+                    <button role="tab" aria-selected="false" data-alternative="vpn">VPN + service mesh</button>
+                </div>
+                <article class="alternative-panel" aria-live="polite">
+                    <div class="alternative-useful">
+                        <span>Useful for</span>
+                        <h3 id="alternative-title">Human collaboration and asynchronous workflows</h3>
+                        <p id="alternative-useful">Slack and email are effective interfaces for people, notifications, approvals, and delayed work.</p>
                     </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Walks through security, privacy, accessibility, and scalability problems that appear when lab-built agent frameworks move into enterprise production. Each stage lets the viewer compare legacy infrastructure behavior with a Cynapsa mesh approach.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open 4_issues.html</span>
-                </a>
+                    <div class="alternative-gap">
+                        <span>The missing foundation</span>
+                        <p id="alternative-gap">Autonomous agents still need governed identity, least-privilege reachability, revocation, discovery, auditability, and a path that does not force nearby peers through a third-party collaboration service.</p>
+                    </div>
+                    <div class="alternative-cynapsa">
+                        <span>Cynapsa adds</span>
+                        <p id="alternative-cynapsa">A private, identity-based connection between authorized agents, while the application keeps the messaging or collaboration interface it already uses.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
 
-                <a href="./healthcare_agents.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Healthcare use case</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Healthcare AI and HIPAA Compliance</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">03</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Demonstrates a hospital sepsis-detection workflow. The legacy path sends protected health information toward the cloud, while the Cynapsa path keeps the health agent and raw EHR data inside the hospital network.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open healthcare_agents.html</span>
-                </a>
-
-                <a href="./legal_doc_agent.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Legal use case</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Legal Data Confidentiality</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">04</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Explains how a law firm can use an AI document agent without uploading confidential client files to the cloud. The Cynapsa version places the document agent next to the private VectorDB and returns only the final answer.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open legal_doc_agent.html</span>
-                </a>
-
-                <a href="./identity_based_routing.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Routing concept</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Identity-Based Routing</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">05</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Compares IP-based networking with Cynapsa routing by cryptographic identity. It highlights mobile agent roaming, IP changes, out-of-band authorization through the control plane, and zero-trust connectivity that survives network changes.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open identity_based_routing.html</span>
-                </a>
-
-                <a href="./distributed_agentic_segmentation.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Distributed segmentation</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Proximity Does Not Equal Trust</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">06</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Shows agentic microsegmentation across AWS, GCP, on-premise, and local networks. The legacy hub-and-spoke VPN connects locations with any-to-any access, while Cynapsa uses identity-based P2P routing and mesh contexts to contain breaches and block shadow agents.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open distributed_agentic_segmentation.html</span>
-                </a>
-
-                <a href="./microsegmentation.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Security simulation</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Kubernetes Blast Radius Simulation</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">07</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        Simulates a compromised AI agent inside a shared Kubernetes namespace. The current network topology allows lateral movement, while Cynapsa agentic microsegmentation contains the compromise through identity-based cryptographic isolation.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open microsegmentation.html</span>
-                </a>
-
-                <a href="./agenitc_sdk.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Layer 7 vs. Layer 3/4</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Agentic SDKs Assume Connectivity</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">08</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        See how agent frameworks like LangGraph, CrewAI, and Google A2A work cleanly at Layer 7, yet fail on legacy networks that force API gateways and open firewall ports, and how Cynapsa provides the zero-trust tunnel instead.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open agenitc_sdk.html</span>
-                </a>
-
-                <a href="./llm_and_ai_security.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Defense in depth</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Securing the Pipes vs. the Water</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">09</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        This demo contrasts a legacy AI networking setup that opens a firewall port and leaves the server exposed, with Cynapsa’s zero-trust Layer 3/4 mesh that keeps firewalls closed while Layer 7 tools inspect the AI payload safely.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open llm_and_ai_security.html</span>
-                </a>
-
-                <a href="./observibility.html" class="group rounded-lg border border-slate-700 bg-slate-900/75 p-5 transition hover:-translate-y-0.5 hover:border-cyan-400 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-400">
-                    <div class="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">Agentic Observability</p>
-                            <h3 class="mt-2 text-xl font-semibold text-white">Visibility and Control</h3>
-                        </div>
-                        <span class="rounded border border-cyan-400/40 px-2 py-1 text-xs font-bold text-cyan-200">10</span>
-                    </div>
-                    <p class="text-sm leading-6 text-slate-300">
-                        See how Cynapsa addresses the legacy failure of code-injected logging by providing visibility across owned, third-party, and unmanaged agents with zero code changes and mesh-delivered telemetry.
-                    </p>
-                    <span class="mt-5 inline-flex text-sm font-semibold text-cyan-300 group-hover:text-cyan-200">Open observibility.html</span>
-                </a>
+        <section class="demo-library" id="demo-library" aria-labelledby="library-title">
+            <div class="library-heading">
+                <p class="eyebrow">Technical deep dives</p>
+                <h2 id="library-title">Explore one capability at a time</h2>
+                <p>The guided experience explains the complete story. These focused simulations let technical audiences inspect specific architecture and security concepts.</p>
+            </div>
+            <div class="library-list">
+                <a href="./cynapsa_technical_walkthrough.html"><span>01 · Architecture</span><strong>Control plane, data paths, policy, and telemetry</strong><i>Explore demo</i></a>
+                <a href="./identity_based_routing.html"><span>02 · Identity</span><strong>Identity-based routing across changing networks</strong><i>Explore demo</i></a>
+                <a href="./distributed_agentic_segmentation.html"><span>03 · Security</span><strong>Agent microsegmentation across environments</strong><i>Explore demo</i></a>
+                <a href="./agenitc_sdk.html"><span>04 · Frameworks</span><strong>Agent frameworks over Cynapsa connectivity</strong><i>Explore demo</i></a>
+                <a href="./llm_and_ai_security.html"><span>05 · Defense in depth</span><strong>Network security with Layer 7 AI protection</strong><i>Explore demo</i></a>
+                <a href="./observibility.html"><span>06 · Visibility</span><strong>Mesh-level telemetry and operational control</strong><i>Explore demo</i></a>
+                <a href="./healthcare_agents.html"><span>07 · Data locality</span><strong>Healthcare agents with local data access</strong><i>Explore demo</i></a>
+                <a href="./legal_doc_agent.html"><span>08 · Data locality</span><strong>Legal document agents beside private data</strong><i>Explore demo</i></a>
             </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <img src="./assets/cynapsa-logo-light.png" alt="Cynapsa">
+        <p>The networking layer for agentic AI</p>
+        <a href="#hero-title">Back to top ↑</a>
+    </footer>
+
+    <div class="presentation-help" aria-hidden="true">← → chapters · Space play/pause · Esc exit</div>
+    <script src="./scripts/experience-v6.js"></script>
+    <script>
+        (() => {
+            if (window.__cynapsaControlsBound) return;
+            window.__cynapsaControlsBound = true;
+            const body = document.body;
+            const stageTakeaway = document.getElementById("stage-takeaway");
+            const firewallRelationship = document.getElementById("firewall-relationship");
+            const modeButtons = [...document.querySelectorAll("button[data-resilience-mode]")];
+            const replicaCards = [...document.querySelectorAll("[data-replica]")];
+            const statusText = document.getElementById("resilience-status-text");
+
+            let mode = "balanced";
+            let state = "healthy";
+            let counts = { a: 0, b: 0, c: 0 };
+
+            function setFirewallState(next) {
+                body.dataset.firewallState = next;
+                firewallRelationship.textContent = next === "authorized"
+                    ? "Authorized and established"
+                    : next === "blocked" ? "Unsolicited attempt blocked" : "Not established";
+
+                if (body.dataset.sceneId === "firewall") {
+                    stageTakeaway.textContent = next === "authorized"
+                        ? "Authorized agents communicate over an established path while the inbound firewall posture remains closed."
+                        : next === "blocked"
+                            ? "The unsolicited attempt is blocked. No public agent endpoint is exposed."
+                            : "Agents initiate connectivity from inside their environments. Unsolicited inbound access stays blocked.";
+                }
+            }
+
+            function renderResilience() {
+                body.dataset.resilienceMode = mode;
+                body.dataset.resilienceState = state;
+                modeButtons.forEach(button => {
+                    const active = button.dataset.resilienceMode === mode;
+                    button.classList.toggle("is-active", active);
+                    button.setAttribute("aria-pressed", String(active));
+                });
+
+                replicaCards.forEach(card => {
+                    const key = card.dataset.replica;
+                    const role = card.querySelector(".replica-role");
+                    const detail = card.querySelector("small");
+                    card.querySelector("b").textContent = String(counts[key]);
+                    card.classList.toggle("is-offline", key === "a" && state === "degraded");
+                    card.classList.toggle("is-promoted", key === "b" && mode === "active-passive" && state === "degraded");
+
+                    if (key === "a") {
+                        role.textContent = state === "degraded" ? "OFFLINE" : "ACTIVE";
+                        detail.textContent = state === "degraded" ? "AWS · unavailable" : "AWS · healthy";
+                    } else if (mode === "active-passive") {
+                        role.textContent = key === "b" && state === "degraded" ? "PROMOTED" : "STANDBY";
+                    } else {
+                        role.textContent = "ACTIVE";
+                    }
+                });
+
+                statusText.textContent = state === "degraded"
+                    ? mode === "active-passive"
+                        ? "Instance A is unavailable. Instance B is active for subsequent requests."
+                        : "Instance A is unavailable. Subsequent requests use healthy instances B and C."
+                    : mode === "active-passive"
+                        ? "Instance A is active. Instances B and C are ready as standby capacity."
+                        : "Three healthy instances are eligible for new requests.";
+            }
+
+            function resetResilience(nextMode = "balanced") {
+                mode = nextMode;
+                state = "healthy";
+                counts = { a: 0, b: 0, c: 0 };
+                renderResilience();
+            }
+
+            function sendRequests() {
+                const eligible = mode === "active-passive"
+                    ? [state === "degraded" ? "b" : "a"]
+                    : state === "degraded" ? ["b", "c"] : ["a", "b", "c"];
+                for (let index = 0; index < 6; index += 1) counts[eligible[index % eligible.length]] += 1;
+                body.classList.remove("requests-moving");
+                window.requestAnimationFrame(() => body.classList.add("requests-moving"));
+                window.setTimeout(() => body.classList.remove("requests-moving"), 1500);
+                renderResilience();
+            }
+
+            document.querySelector('[data-action="attempt-inbound"]').addEventListener("click", () => setFirewallState("blocked"));
+            document.querySelector('[data-action="authorize-path"]').addEventListener("click", () => setFirewallState("authorized"));
+            document.querySelector('[data-action="reset-firewall"]').addEventListener("click", () => setFirewallState("idle"));
+            modeButtons.forEach(button => button.addEventListener("click", () => resetResilience(button.dataset.resilienceMode)));
+            document.querySelector('[data-action="send-requests"]').addEventListener("click", sendRequests);
+            document.querySelector('[data-action="fail-instance"]').addEventListener("click", () => {
+                state = "degraded";
+                renderResilience();
+            });
+            document.querySelector('[data-action="restore-instances"]').addEventListener("click", () => {
+                state = "healthy";
+                renderResilience();
+            });
+
+            document.querySelectorAll("[data-scene-target], button[data-lens]").forEach(button => button.addEventListener("click", () => {
+                window.setTimeout(() => {
+                    if (body.dataset.sceneId === "firewall") setFirewallState("idle");
+                    if (body.dataset.sceneId === "resilience") resetResilience();
+                }, 0);
+            }));
+        })();
+    </script>
 </body>
 </html>

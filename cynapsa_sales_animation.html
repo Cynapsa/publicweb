@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cynapsa Animated Explainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { color-scheme: dark; }
+        body {
+            background: #050811;
+            color: #e2e8f0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .bg-grid {
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+            background-size: 34px 34px;
+        }
+        .stage-svg text { user-select: none; }
+        .node-core { transition: opacity 360ms ease, transform 360ms ease, filter 360ms ease; transform-box: fill-box; transform-origin: center; }
+        .node-active { filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.7)); }
+        .flow-line { stroke-dasharray: 10 10; animation: dash 1s linear infinite; }
+        .flow-slow { stroke-dasharray: 14 12; animation: dash 2.2s linear infinite; }
+        .pulse { animation: pulse 1.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+        .blink { animation: blink 1.2s ease-in-out infinite; }
+        @keyframes dash { to { stroke-dashoffset: -44; } }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.07); opacity: 0.86; }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.45; }
+        }
+        .scene-card {
+            transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+        }
+        .scene-card.active {
+            border-color: #22d3ee;
+            background: rgba(8, 145, 178, 0.16);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.14);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden">
+    <main class="h-full w-full grid grid-cols-[380px_1fr]">
+        <aside class="grid h-full gap-4 overflow-hidden border-r border-slate-700 bg-slate-900/95 p-6" style="grid-template-rows: auto minmax(0, 1fr) auto;">
+            <div class="mb-5">
+                <div class="text-[11px] font-bold uppercase tracking-[0.28em] text-cyan-300">Cynapsa sales explainer</div>
+                <h1 class="mt-3 text-3xl font-bold leading-tight text-white">The network layer for agentic AI</h1>
+                <p class="mt-3 text-sm leading-6 text-slate-400">A short animated story for non-technical buyers: why agents break in production, and how Cynapsa makes them secure, private, and deployable.</p>
+            </div>
+
+            <div id="scene-list" class="min-h-0 space-y-2 overflow-y-auto pr-1" style="max-height: 38vh;"></div>
+
+            <section class="rounded-lg border border-slate-700 bg-slate-950/70 p-4">
+                <div class="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-300">Narration</div>
+                <h2 id="scene-title" class="mt-2 text-xl font-bold text-white"></h2>
+                <p id="scene-copy" class="mt-2 min-h-20 text-sm leading-6 text-slate-300"></p>
+                <div id="scene-proof" class="mt-3 grid grid-cols-2 gap-2"></div>
+                <div class="mt-4 grid grid-cols-4 gap-2">
+                    <button id="prev-btn" class="rounded border border-slate-600 bg-slate-800 px-3 py-2 text-sm font-bold text-slate-200 hover:border-cyan-400">Back</button>
+                    <button id="play-btn" class="rounded border border-cyan-500 bg-cyan-700 px-3 py-2 text-sm font-bold text-white hover:bg-cyan-600">Play</button>
+                    <button id="pause-btn" class="rounded border border-slate-600 bg-slate-800 px-3 py-2 text-sm font-bold text-slate-200 hover:border-cyan-400">Pause</button>
+                    <button id="next-btn" class="rounded border border-slate-600 bg-slate-800 px-3 py-2 text-sm font-bold text-slate-200 hover:border-cyan-400">Next</button>
+                </div>
+            </section>
+        </aside>
+
+        <section class="relative overflow-hidden bg-[#050811]">
+            <div class="bg-grid absolute inset-0 opacity-35"></div>
+            <div class="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-cyan-950/30 to-transparent"></div>
+            <svg id="stage" class="stage-svg relative z-10 h-full w-full" viewBox="0 0 1100 700" role="img" aria-label="Animated Cynapsa explainer diagram"></svg>
+            <div class="absolute bottom-5 left-5 right-5 z-20 flex items-center justify-between rounded-lg border border-slate-700 bg-slate-950/80 px-5 py-3 backdrop-blur">
+                <div>
+                    <div class="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">Current takeaway</div>
+                    <div id="takeaway" class="mt-1 text-sm font-semibold text-slate-200"></div>
+                </div>
+                <div class="text-right text-xs text-slate-500"><span id="counter"></span></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const scenes = [
+            {
+                eyebrow: "The lab works",
+                title: "Agents look easy in a clean demo.",
+                copy: "In the lab, agents live in one simple environment. They can call each other, share context, and complete work without anyone thinking about the network.",
+                takeaway: "Agent frameworks assume the network is already solved.",
+                proof: ["Fast prototype", "One trusted space"],
+                mode: "lab"
+            },
+            {
+                eyebrow: "Reality splits",
+                title: "Production is spread across many places.",
+                copy: "Real enterprises have agents in cloud services, customer environments, private data centers, and employee devices. The simple lab network disappears.",
+                takeaway: "Every new location creates a new connectivity and security problem.",
+                proof: ["Cloud", "On-prem", "Edge", "Devices"],
+                mode: "distributed"
+            },
+            {
+                eyebrow: "Legacy answer",
+                title: "The old fix is a pile of infrastructure.",
+                copy: "Teams add VPNs, gateways, firewall exceptions, and load balancers. It works slowly, but it creates bottlenecks and opens paths attackers can use.",
+                takeaway: "Legacy networking connects places, not trusted agents.",
+                proof: ["Open ports", "VPN chokepoints", "Manual tickets", "Blast radius"],
+                mode: "legacy"
+            },
+            {
+                eyebrow: "The Cynapsa shift",
+                title: "Cynapsa gives every agent an identity.",
+                copy: "Cynapsa changes the unit of trust from an IP address to an agent identity. Agents request access first, and only approved connections are created.",
+                takeaway: "Identity becomes the new network boundary.",
+                proof: ["Cryptographic identity", "Policy before traffic", "No inbound ports", "P2P mesh"],
+                mode: "identity"
+            },
+            {
+                eyebrow: "Private by design",
+                title: "Move the agent to the data, not the data to the cloud.",
+                copy: "Sensitive records can stay inside a hospital, law firm, or customer environment. A local agent works near the data and sends back only the answer.",
+                takeaway: "Cynapsa helps unlock AI without moving raw private data.",
+                proof: ["Data stays local", "Small answer returns", "Faster approval", "Lower compliance risk"],
+                mode: "privacy"
+            },
+            {
+                eyebrow: "Contained risk",
+                title: "A compromised agent cannot wander.",
+                copy: "If an agent becomes risky, Cynapsa blocks unauthorized connections. The rest of the environment keeps working because there is no flat network to spread through.",
+                takeaway: "A bad agent does not become an enterprise-wide incident.",
+                proof: ["No lateral movement", "Policy blocks traffic", "Small blast radius", "Business continues"],
+                mode: "containment"
+            },
+            {
+                eyebrow: "The outcome",
+                title: "Agentic AI gets production-grade networking.",
+                copy: "Cynapsa provides secure connectivity, privacy, segmentation, and visibility so enterprises can deploy agentic AI across real environments.",
+                takeaway: "Cynapsa is the secure network layer for production agentic AI.",
+                proof: ["Deploy anywhere", "Connect safely", "Observe centrally", "Scale cleanly"],
+                mode: "final"
+            }
+        ];
+
+        const stage = document.getElementById("stage");
+        const sceneList = document.getElementById("scene-list");
+        const sceneTitle = document.getElementById("scene-title");
+        const sceneCopy = document.getElementById("scene-copy");
+        const sceneProof = document.getElementById("scene-proof");
+        const takeaway = document.getElementById("takeaway");
+        const counter = document.getElementById("counter");
+        let sceneIndex = 0;
+        let timer = null;
+
+        function envBox(x, y, w, h, label, color = "#334155", opacity = 1) {
+            return `
+                <g opacity="${opacity}">
+                    <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="rgba(15, 23, 42, 0.78)" stroke="${color}" stroke-width="2"/>
+                    <text x="${x + 18}" y="${y + 28}" fill="${color}" font-size="13" font-family="monospace" font-weight="700">${label}</text>
+                </g>`;
+        }
+
+        function node(id, x, y, label, color = "#22d3ee", active = true) {
+            return `
+                <g class="node-core ${active ? "node-active" : ""}" opacity="${active ? 1 : 0.34}">
+                    <circle cx="${x}" cy="${y}" r="30" fill="#0f172a" stroke="${color}" stroke-width="3"/>
+                    <circle cx="${x}" cy="${y}" r="8" fill="${color}" class="${active ? "pulse" : ""}"/>
+                    <text x="${x}" y="${y + 54}" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700">${label}</text>
+                    <text x="${x}" y="${y + 72}" text-anchor="middle" fill="#94a3b8" font-size="10">${id}</text>
+                </g>`;
+        }
+
+        function line(x1, y1, x2, y2, color, width = 3, cls = "flow-line", opacity = 1) {
+            return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" opacity="${opacity}" class="${cls}"/>`;
+        }
+
+        function pill(x, y, label, color) {
+            return `
+                <g>
+                    <rect x="${x}" y="${y}" width="${label.length * 8 + 34}" height="34" rx="17" fill="rgba(15, 23, 42, 0.94)" stroke="${color}" stroke-width="2"/>
+                    <text x="${x + 17}" y="${y + 22}" fill="${color}" font-size="13" font-weight="800">${label}</text>
+                </g>`;
+        }
+
+        function renderStage(mode) {
+            const base = [
+                envBox(70, 90, 290, 170, "CLOUD APP", "#38bdf8", mode === "lab" ? 1 : 0.95),
+                envBox(720, 80, 300, 165, "PUBLIC CLOUD", "#38bdf8", mode === "lab" ? 0 : 1),
+                envBox(720, 430, 300, 165, "PRIVATE DATA", "#f59e0b", mode === "lab" ? 0 : 1),
+                envBox(70, 430, 300, 165, "ROAMING DEVICES", "#a78bfa", mode === "lab" ? 0 : 1),
+                node("A-102", mode === "lab" ? 145 : 180, mode === "lab" ? 170 : 515, "Sales", "#22d3ee"),
+                node("A-287", mode === "lab" ? 220 : 825, mode === "lab" ? 170 : 165, "Research", "#22d3ee"),
+                node("A-431", mode === "lab" ? 295 : 860, mode === "lab" ? 170 : 520, "Data", "#22d3ee"),
+                node("A-514", 925, 165, "Action", "#22d3ee", mode !== "lab"),
+                node("A-629", 225, 515, "Field", "#22d3ee", mode !== "lab"),
+            ];
+
+            if (mode === "lab") {
+                base.push(line(145, 170, 220, 170, "#22d3ee"));
+                base.push(line(220, 170, 295, 170, "#22d3ee"));
+                base.push(pill(430, 150, "Everything can talk", "#22d3ee"));
+            }
+
+            if (mode === "distributed") {
+                base.push(line(180, 515, 825, 165, "#64748b", 2, "flow-slow", 0.45));
+                base.push(line(825, 165, 860, 520, "#64748b", 2, "flow-slow", 0.45));
+                base.push(line(925, 165, 860, 520, "#64748b", 2, "flow-slow", 0.45));
+                base.push(pill(425, 305, "Production fragments the network", "#f59e0b"));
+            }
+
+            if (mode === "legacy") {
+                base.push(`<rect x="470" y="255" width="165" height="105" rx="18" fill="rgba(124, 45, 18, 0.84)" stroke="#f97316" stroke-width="3"/>`);
+                base.push(`<text x="552" y="295" text-anchor="middle" fill="#fed7aa" font-size="15" font-weight="900">VPN + API GW</text>`);
+                base.push(`<text x="552" y="322" text-anchor="middle" fill="#fdba74" font-size="12">central chokepoint</text>`);
+                base.push(line(180, 515, 552, 307, "#f59e0b", 5, "flow-slow"));
+                base.push(line(825, 165, 552, 307, "#f59e0b", 5, "flow-slow"));
+                base.push(line(552, 307, 860, 520, "#ef4444", 5, "flow-slow"));
+                base.push(pill(380, 395, "Open ports create risk", "#ef4444"));
+            }
+
+            if (mode === "identity" || mode === "privacy" || mode === "containment" || mode === "final") {
+                base.push(`<g class="pulse"><circle cx="550" cy="335" r="58" fill="rgba(88, 28, 135, 0.75)" stroke="#a855f7" stroke-width="3"/><text x="550" y="330" text-anchor="middle" fill="#f5d0fe" font-size="14" font-weight="900">Cynapsa</text><text x="550" y="350" text-anchor="middle" fill="#d8b4fe" font-size="11">control plane</text></g>`);
+                base.push(line(550, 335, 180, 515, "#a855f7", 2, "flow-line", 0.7));
+                base.push(line(550, 335, 825, 165, "#a855f7", 2, "flow-line", 0.7));
+                base.push(line(550, 335, 860, 520, "#a855f7", 2, "flow-line", 0.7));
+            }
+
+            if (mode === "identity") {
+                base.push(line(180, 515, 825, 165, "#22d3ee", 4));
+                base.push(line(825, 165, 925, 165, "#22d3ee", 4));
+                base.push(pill(390, 465, "Approved identity-based paths only", "#22d3ee"));
+            }
+
+            if (mode === "privacy") {
+                base.push(line(860, 520, 825, 165, "#22d3ee", 4));
+                base.push(`<rect x="760" y="545" width="200" height="34" rx="17" fill="rgba(5, 150, 105, 0.2)" stroke="#4ade80" stroke-width="2"/><text x="860" y="567" text-anchor="middle" fill="#86efac" font-size="13" font-weight="900">raw data stays here</text>`);
+                base.push(`<rect x="642" y="263" width="110" height="34" rx="17" fill="rgba(8, 145, 178, 0.24)" stroke="#22d3ee" stroke-width="2"/><text x="697" y="285" text-anchor="middle" fill="#67e8f9" font-size="12" font-weight="900">answer only</text>`);
+            }
+
+            if (mode === "containment") {
+                base.push(node("Risk", 225, 515, "Compromised", "#ef4444", true));
+                base.push(line(225, 515, 860, 520, "#ef4444", 5, "flow-slow", 0.65));
+                base.push(`<g class="blink"><rect x="498" y="455" width="120" height="42" rx="10" fill="rgba(127, 29, 29, 0.92)" stroke="#ef4444" stroke-width="3"/><text x="558" y="482" text-anchor="middle" fill="#fecaca" font-size="15" font-weight="900">BLOCKED</text></g>`);
+                base.push(pill(405, 540, "Blast radius contained", "#4ade80"));
+            }
+
+            if (mode === "final") {
+                base.push(line(180, 515, 825, 165, "#4ade80", 4));
+                base.push(line(825, 165, 925, 165, "#38bdf8", 4));
+                base.push(line(825, 165, 860, 520, "#22d3ee", 4));
+                base.push(line(225, 515, 860, 520, "#4ade80", 4));
+                base.push(pill(365, 120, "Secure connectivity", "#22d3ee"));
+                base.push(pill(392, 505, "Privacy + segmentation + visibility", "#4ade80"));
+            }
+
+            stage.innerHTML = base.join("");
+        }
+
+        function renderScene(index) {
+            sceneIndex = (index + scenes.length) % scenes.length;
+            const scene = scenes[sceneIndex];
+            renderStage(scene.mode);
+            sceneTitle.textContent = scene.title;
+            sceneCopy.textContent = scene.copy;
+            takeaway.textContent = scene.takeaway;
+            counter.textContent = `${sceneIndex + 1} / ${scenes.length}`;
+            sceneProof.innerHTML = scene.proof.map(item => `<div class="rounded border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-300">${item}</div>`).join("");
+            sceneList.querySelectorAll("button").forEach((button, buttonIndex) => {
+                button.classList.toggle("active", buttonIndex === sceneIndex);
+            });
+        }
+
+        function buildSceneList() {
+            sceneList.innerHTML = scenes.map((scene, index) => `
+                <button class="scene-card w-full rounded-lg border border-slate-700 bg-slate-950/50 p-3 text-left" type="button" data-index="${index}">
+                    <div class="flex items-center justify-between gap-3">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-300">${scene.eyebrow}</span>
+                        <span class="text-xs font-bold text-slate-500">${String(index + 1).padStart(2, "0")}</span>
+                    </div>
+                    <div class="mt-1 text-sm font-bold text-white">${scene.title}</div>
+                </button>
+            `).join("");
+            sceneList.querySelectorAll("button").forEach(button => {
+                button.addEventListener("click", () => {
+                    pause();
+                    renderScene(Number(button.dataset.index));
+                });
+            });
+        }
+
+        function next() { renderScene(sceneIndex + 1); }
+        function previous() { renderScene(sceneIndex - 1); }
+        function play() {
+            pause();
+            timer = setInterval(next, 5200);
+        }
+        function pause() {
+            if (timer) clearInterval(timer);
+            timer = null;
+        }
+
+        document.getElementById("next-btn").addEventListener("click", () => { pause(); next(); });
+        document.getElementById("prev-btn").addEventListener("click", () => { pause(); previous(); });
+        document.getElementById("play-btn").addEventListener("click", play);
+        document.getElementById("pause-btn").addEventListener("click", pause);
+        document.addEventListener("keydown", event => {
+            if (event.key === "ArrowRight") { pause(); next(); }
+            if (event.key === "ArrowLeft") { pause(); previous(); }
+            if (event.key === " ") { event.preventDefault(); timer ? pause() : play(); }
+        });
+
+        buildSceneList();
+        renderScene(0);
+    </script>
+</body>
+</html>

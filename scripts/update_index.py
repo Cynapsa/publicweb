@@ -16,6 +16,9 @@ METADATA_PATH = ROOT / "scripts" / "demo_metadata.json"
 
 DEMO_ORDER = [
     "POC_to_Cynapsa.html",
+    "cynapsa_sales_movie.html",
+    "cynapsa_sales_animation.html",
+    "cynapsa_technical_walkthrough.html",
     "4_issues.html",
     "healthcare_agents.html",
     "legal_doc_agent.html",
@@ -29,6 +32,21 @@ DEMO_OVERRIDES = {
         "eyebrow": "Start here",
         "title": "The Evolution of Agentic Networking",
         "description": "Shows the shift from a simple single-environment proof of concept to production reality, where load balancers, API gateways, VPNs, and firewalls create bottlenecks. The final stage introduces the Cynapsa mesh as an identity-native alternative with native agent load balancing.",
+    },
+    "cynapsa_sales_movie.html": {
+        "eyebrow": "Sales movie",
+        "title": "From Agent Demo to Production Mesh",
+        "description": "An auto-playing movie-style explainer showing a multi-agent app moving from one clean environment into production locations, exposing legacy networking gaps, and revealing Cynapsa's zero-trust identity mesh with no application code changes.",
+    },
+    "cynapsa_sales_animation.html": {
+        "eyebrow": "Sales explainer",
+        "title": "The Network Layer for Agentic AI",
+        "description": "A buyer-friendly animated story showing why agentic AI breaks outside the lab, how legacy networking creates risk and delay, and how Cynapsa enables secure identity-based connectivity across real enterprise environments.",
+    },
+    "cynapsa_technical_walkthrough.html": {
+        "eyebrow": "Technical walkthrough",
+        "title": "Cynapsa Architecture for Engineers",
+        "description": "A deeper animated walkthrough for engineering and security teams covering identity, control-plane authorization, encrypted P2P data paths, segmentation, Layer 7 security integration, telemetry, and incident containment.",
     },
     "4_issues.html": {
         "eyebrow": "Framework barriers",
