@@ -925,6 +925,7 @@ body[data-policy-state="revoked"][data-scene-id="microsegmentation"] .protected-
 
 body[data-scene-id="deployment"] .topology > *:not(.grid-glow):not(.sdk-layer):not(.scene-callout) { opacity: .06; pointer-events: none; }
 body[data-scene-id="deployment"] .sdk-layer { display: grid; }
+body[data-scene-id="deployment"] .callout-sdk { display: none; }
 
 .section-shell {
     width: min(1380px, calc(100% - 48px));
