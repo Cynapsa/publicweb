@@ -100,7 +100,8 @@
 
             <div class="architecture-stage" id="architecture-stage" tabindex="0" aria-label="Animated Cynapsa architecture diagram">
                 <div class="stage-header">
-                    <div>
+                    <div class="stage-heading-lockup">
+                        <span class="stage-sequence" id="stage-sequence">01 / 08</span>
                         <p class="stage-eyebrow" id="stage-eyebrow">Production reality</p>
                         <h2 id="stage-title">Agents cross network boundaries</h2>
                     </div>
@@ -366,10 +367,27 @@
                     </div>
 
                     <div class="sdk-layer">
-                        <span>YOUR AGENT APPLICATION</span>
-                        <div class="sdk-code">agent.run(task)</div>
-                        <div class="sdk-bridge">NO CODE CHANGE</div>
-                        <strong>CYNAPSA NETWORKING LAYER</strong>
+                        <div class="sdk-app-card">
+                            <span>YOUR EXISTING AGENT APPLICATION</span>
+                            <div class="sdk-app-flow">
+                                <i class="sdk-app-node">AI</i>
+                                <div>
+                                    <strong>Framework and business logic</strong>
+                                    <small>LangGraph · CrewAI · custom runtime</small>
+                                </div>
+                                <code>agent.run(task)</code>
+                            </div>
+                        </div>
+                        <div class="sdk-bridge"><span>NO CODE CHANGE</span><small>Connectivity changes below the application</small></div>
+                        <div class="sdk-network-card">
+                            <div class="sdk-network-heading">
+                                <span>CYNAPSA NETWORKING LAYER</span>
+                                <strong>Identity · policy · discovery · private connectivity</strong>
+                            </div>
+                            <div class="sdk-network-flow" aria-hidden="true">
+                                <i>AWS</i><b></b><i>VPC</i><b></b><i>EDGE</i><b></b><i>DATA</i>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

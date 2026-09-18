@@ -182,6 +182,7 @@
     const sceneArchitecture = document.getElementById("scene-architecture");
     const stageEyebrow = document.getElementById("stage-eyebrow");
     const stageTitle = document.getElementById("stage-title");
+    const stageSequence = document.getElementById("stage-sequence");
     const stageTakeaway = document.getElementById("stage-takeaway");
     const stageExplainerText = document.getElementById("stage-explainer-text");
     const stageExplainer = document.getElementById("stage-explainer");
@@ -317,6 +318,7 @@
         sceneArchitecture.textContent = scene.architecture;
         stageEyebrow.textContent = scene.stageEyebrow;
         stageTitle.textContent = scene.stageTitle;
+        stageSequence.textContent = `${String(currentScene + 1).padStart(2, "0")} / ${String(scenes.length).padStart(2, "0")}`;
         stageTakeaway.textContent = scene.takeaway;
         stageExplainerText.textContent = scene.explainer;
         stageExplainer.hidden = true;
